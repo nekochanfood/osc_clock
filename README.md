@@ -23,5 +23,11 @@ Example DateTime: `2012/03/14 12:34:56`
 | Year_2 (Int) | `/avatar/parameters/year_2`  | Int  | 0 ~ 9 | `1` |
 | Year_3 (Int) | `/avatar/parameters/year_3`  | Int  | 0 ~ 9 | `2` |
 
+## Advice on use
+
+These parameters are set to be sent every second by default.
+
+Therefore, when synchronising these parameters, it is recommended to set the rate to 60x (send every minute) from config.json.
+
 ## Troubleshooting
 Use `.\osc_clock.exe repair` to repair `.\config.json`.
