@@ -27,7 +27,9 @@ Example DateTime: `2012/03/14 12:34:56`
 
 These parameters are set to be sent every second by default.
 
-Therefore, when synchronising these parameters, it is recommended to set the rate to 60x (send every minute) from config.json.
+To reduce the transmission load on the VRChat side, it is recommended to turn off parameter synchronisation.
+
+If you still want to synchronise, it is recommended to set the rate to 60x (send every minute) from config.json.
 
 ## Troubleshooting
 Use `.\osc_clock.exe repair` to repair `.\config.json`.
