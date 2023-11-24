@@ -1,0 +1,24 @@
+{
+    "ip": "127.0.0.1",
+    "port": 9000,
+    "update_rate": 1000,
+    "addresses": [
+        "/avatar/parameters/second_f",
+        "/avatar/parameters/second_i",
+        "/avatar/parameters/minute_f",
+        "/avatar/parameters/minute_i",
+        "/avatar/parameters/hour24_f",
+        "/avatar/parameters/hour24_i",
+        "/avatar/parameters/hour12_f",
+        "/avatar/parameters/hour12_i",
+        "/avatar/parameters/hour_isPM",
+        "/avatar/parameters/day",
+        "/avatar/parameters/dofw",
+        "/avatar/parameters/month",
+        "/avatar/parameters/year",
+        "/avatar/parameters/year_0",
+        "/avatar/parameters/year_1",
+        "/avatar/parameters/year_2",
+        "/avatar/parameters/year_3"
+    ]
+}
