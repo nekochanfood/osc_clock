@@ -22,3 +22,6 @@ Example DateTime: `2012/03/14 12:34:56`
 | Year_1 (Int) | `/avatar/parameters/year_1`  | Int  | 0 ~ 9 | `0` |
 | Year_2 (Int) | `/avatar/parameters/year_2`  | Int  | 0 ~ 9 | `1` |
 | Year_3 (Int) | `/avatar/parameters/year_3`  | Int  | 0 ~ 9 | `2` |
+
+## Troubleshooting
+Use `.\osc_clock.exe repair` to repair `.\config.json`.
