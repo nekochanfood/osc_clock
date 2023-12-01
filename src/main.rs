@@ -58,7 +58,6 @@ fn get_fallback_config() -> Config {
             "/avatar/parameters/osc_clock@year_3".to_string()
         ],
         update_handle_addresses: vec![
-            "/avatar/parameters/MuteSelf".to_string(),
             "/avatar/parameters/osc_clock@ForceSync".to_string()
         ]
     };
