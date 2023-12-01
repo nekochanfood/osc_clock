@@ -14,7 +14,7 @@ Example DateTime: `2012/03/14 12:34:56`
 | 12 Hour (Float) | `/avatar/parameters/hour12_f`  | Float  | 0 ~ 1 | `0` |
 | 12 Hour (Int) | `/avatar/parameters/hour12_i`  | Int  | 0 ~ 11 | `0` |
 | isPM (Bool) | `/avatar/parameters/hour_isPM`  | Bool  | True or False | `True` |
-| Day (Int) | `/avatar/parameters/day`  | Int  | 1 ~ 31 | 14 |
+| Day (Int) | `/avatar/parameters/day`  | Int  | 1 ~ 31 | `14` |
 | Weekday (Int) | `/avatar/parameters/dofw`  | Int  | 0 ~ 6 (Starts from monday) | `2` |
 | Month (Int) | `/avatar/parameters/month`  | Int  | 1 ~ 12 | `3` |
 | Year (Int) | `/avatar/parameters/year`  | Int  | 0 ~ ? | `2012` |
