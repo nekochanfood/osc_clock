@@ -1,6 +1,6 @@
 extern crate rosc;
 use std::fmt::Debug;
-use std::thread;
+use std::{thread, default};
 use serde::{Serialize, Deserialize};
 use std::net::{UdpSocket, SocketAddr};
 use rosc::{OscPacket, OscMessage, OscType};
@@ -18,6 +18,7 @@ struct Config {
     sender_port: u16,
     receiver_ip: String,
     receiver_port: u16,
+    show_debug_log: bool,
     addresses: Vec<String>,
     update_handle_addresses: Vec<String>,
 }
@@ -36,28 +37,29 @@ fn get_fallback_config() -> Config {
         sender_port: 9000,
         receiver_ip: "127.0.0.1".to_string(),
         receiver_port: 9001,
+        show_debug_log: false,
         addresses: vec![
-            "/avatar/parameters/second_f".to_string(),
-            "/avatar/parameters/second_i".to_string(),
-            "/avatar/parameters/minute_f".to_string(),
-            "/avatar/parameters/minute_i".to_string(),
-            "/avatar/parameters/hour24_f".to_string(),
-            "/avatar/parameters/hour24_i".to_string(),
-            "/avatar/parameters/hour12_f".to_string(),
-            "/avatar/parameters/hour12_i".to_string(),
-            "/avatar/parameters/hour_isPM".to_string(),
-            "/avatar/parameters/day".to_string(),
-            "/avatar/parameters/dofw".to_string(),
-            "/avatar/parameters/month".to_string(),
-            "/avatar/parameters/year".to_string(),
-            "/avatar/parameters/year_0".to_string(),
-            "/avatar/parameters/year_1".to_string(),
-            "/avatar/parameters/year_2".to_string(),
-            "/avatar/parameters/year_3".to_string()
+            "/avatar/parameters/osc_clock@second_f".to_string(),
+            "/avatar/parameters/osc_clock@second_i".to_string(),
+            "/avatar/parameters/osc_clock@minute_f".to_string(),
+            "/avatar/parameters/osc_clock@minute_i".to_string(),
+            "/avatar/parameters/osc_clock@hour24_f".to_string(),
+            "/avatar/parameters/osc_clock@hour24_i".to_string(),
+            "/avatar/parameters/osc_clock@hour12_f".to_string(),
+            "/avatar/parameters/osc_clock@hour12_i".to_string(),
+            "/avatar/parameters/osc_clock@hour_isPM".to_string(),
+            "/avatar/parameters/osc_clock@day".to_string(),
+            "/avatar/parameters/osc_clock@dofw".to_string(),
+            "/avatar/parameters/osc_clock@month".to_string(),
+            "/avatar/parameters/osc_clock@year".to_string(),
+            "/avatar/parameters/osc_clock@year_0".to_string(),
+            "/avatar/parameters/osc_clock@year_1".to_string(),
+            "/avatar/parameters/osc_clock@year_2".to_string(),
+            "/avatar/parameters/osc_clock@year_3".to_string()
         ],
         update_handle_addresses: vec![
             "/avatar/parameters/MuteSelf".to_string(),
-            "/avatar/parameters/osc_clock_ForceSync".to_string()
+            "/avatar/parameters/osc_clock@ForceSync".to_string()
         ]
     };
     return config;
@@ -120,7 +122,7 @@ fn main() {
         }
         Err(_error) => {
             print_flush(print_log("config.json の読み込みに失敗しました。代わりにデフォルトの設定を使用します。".to_string(),LogType::WARN));
-            print_flush(print_log("`\\osc_clock.exe repair` でconfig.jsonを初期状態に戻します。\n".to_string(),LogType::INFO));
+            print_flush(print_log("`\\osc_clock.exe repair` でconfig.jsonを初期状態に戻します。".to_string(),LogType::INFO));
             config = get_fallback_config();
         }
     }
@@ -135,12 +137,13 @@ fn main() {
     let thread1_sender_ip = config.sender_ip.clone();
     let thread1_sender_port = config.sender_port.clone();
     let thread1_addresses = config.addresses.clone();
+    let thread1_show_debug_log = config.show_debug_log.clone();
 
     let thread0 = thread::spawn(move || {
         let receiver_address: SocketAddr = (thread0_receiver_ip.to_string() + ":" + &thread0_receiver_port.to_string()).parse().expect(&print_log("Failed to parse address".to_string(), LogType::ERROR));
         let socket = UdpSocket::bind(receiver_address).expect(&print_log("Failed to bind socket".to_string(), LogType::ERROR));
         
-        print_flush(print_log(format!("{} からのパケットを受信します\n", receiver_address),LogType::INFO));
+        print_flush(print_log(format!("{} からのパケットを受信します", receiver_address),LogType::INFO));
     
         loop {
             let mut buf = [0; 2048];
@@ -149,11 +152,20 @@ fn main() {
                 Ok(packet) => {
                     match packet {
                         (_,OscPacket::Message(msg)) => {
+                            match msg.args[0] {
+                                OscType::Bool(b) => {
+                                    if !b {
+                                        return;
+                                    }
+                                }
+                                _ => {}
+                            }
                             for n in 0..thread0_update_handle_addresses.len() {
                                 if msg.addr.to_string() == thread0_update_handle_addresses[n].to_string() {
                                     print_flush(print_log(format!("パラメータ同期判定アドレスからのパケットを受信:\t{}", msg.addr.to_string()),LogType::EVENT));
                                     let sync_toggle = vec![true,true,true];
-                                    composition(thread0_addresses.to_vec(),thread0_sender_ip.to_string(),thread0_sender_port,sync_toggle);
+                                    composition(thread0_addresses.to_vec(),thread0_sender_ip.to_string(),thread0_sender_port,sync_toggle,false);
+                                    print_flush(print_log(format!("同期しました\t({})",Local::now().format("%Y-%m-%d %H:%M:%S")),LogType::SEND));
                                     break;
                                 }
                             }
@@ -216,7 +228,7 @@ fn main() {
                 send_day = false;
             }
             let sync_toggle = vec![send_minute,send_hour,send_day];
-            composition(thread1_addresses.to_vec(),thread1_sender_ip.to_string(),thread1_sender_port,sync_toggle);
+            composition(thread1_addresses.to_vec(),thread1_sender_ip.to_string(),thread1_sender_port,sync_toggle,thread1_show_debug_log);
             current_second = dt.second();
         }
     });
@@ -261,10 +273,10 @@ fn print_log(str: String,log_type: LogType) -> String{
             prefix = format!("[\x1b[{}mSEND\x1b[m]\t",30+2);
         },
     }
-    return format!("{}{}",prefix,str);
+    return format!("{}{}\n",prefix,str);
 }
 
-fn composition(addresses: Vec<String>, ip: String, port: u16,sync_toggle: Vec<bool>){
+fn composition(addresses: Vec<String>, ip: String, port: u16,sync_toggle: Vec<bool>,show_debug_log: bool){
     let dt = Local::now();
 
         let second = dt.second();
@@ -350,8 +362,9 @@ fn composition(addresses: Vec<String>, ip: String, port: u16,sync_toggle: Vec<bo
             send(year_2,&ip,port);
             send(year_3,&ip,port); 
         }
-
-        print_flush(print_log(format!("{0}:{1} に値を送信 ({2})\t(分: {3:<5} | 時間: {4:<5} | 日付: {5:<5})",ip,port,dt.format("%Y-%m-%d %H:%M:%S.%f"),sync_toggle[0],sync_toggle[1],sync_toggle[2]), LogType::SEND));
+        if show_debug_log {
+            print_flush(print_log(format!("{0}:{1} に値を送信 ({2})\t(分: {3:<5} | 時間: {4:<5} | 日付: {5:<5})",ip,port,dt.format("%Y-%m-%d %H:%M:%S.%f"),sync_toggle[0],sync_toggle[1],sync_toggle[2]), LogType::SEND));
+        }
 }
 
 // 送信用
