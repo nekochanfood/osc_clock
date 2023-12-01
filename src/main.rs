@@ -1,6 +1,6 @@
 extern crate rosc;
 use std::fmt::Debug;
-use std::{thread, default};
+use std::thread;
 use serde::{Serialize, Deserialize};
 use std::net::{UdpSocket, SocketAddr};
 use rosc::{OscPacket, OscMessage, OscType};
@@ -150,22 +150,28 @@ fn main() {
             match rosc::decoder::decode_udp(&buf[..size]) {
                 Ok(packet) => {
                     match packet {
+                        
                         (_,OscPacket::Message(msg)) => {
+                            let update: bool;
                             match msg.args[0] {
                                 OscType::Bool(b) => {
-                                    if !b {
-                                        return;
+                                    if b {
+                                        update = true;
+                                    }else{
+                                        update = false;
                                     }
                                 }
-                                _ => {}
+                                _ => {update = true;}
                             }
-                            for n in 0..thread0_update_handle_addresses.len() {
-                                if msg.addr.to_string() == thread0_update_handle_addresses[n].to_string() {
-                                    print_flush(print_log(format!("パラメータ同期判定アドレスからのパケットを受信:\t{}", msg.addr.to_string()),LogType::EVENT));
-                                    let sync_toggle = vec![true,true,true];
-                                    composition(thread0_addresses.to_vec(),thread0_sender_ip.to_string(),thread0_sender_port,sync_toggle,false);
-                                    print_flush(print_log(format!("同期しました\t({})",Local::now().format("%Y-%m-%d %H:%M:%S")),LogType::SEND));
-                                    break;
+                            if update {
+                                for n in 0..thread0_update_handle_addresses.len() {
+                                    if msg.addr.to_string() == thread0_update_handle_addresses[n].to_string() {
+                                        print_flush(print_log(format!("パラメータ同期判定アドレスからのパケットを受信:\t{}", msg.addr.to_string()),LogType::EVENT));
+                                        let sync_toggle = vec![true,true,true];
+                                        composition(thread0_addresses.to_vec(),thread0_sender_ip.to_string(),thread0_sender_port,sync_toggle,false);
+                                        print_flush(print_log(format!("同期しました\t({})",Local::now().format("%Y-%m-%d %H:%M:%S")),LogType::SEND));
+                                        break;
+                                    }
                                 }
                             }
                         }
