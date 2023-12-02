@@ -304,12 +304,14 @@ fn composition(addresses: Vec<String>, ip: String, port: u16,sync_toggle: Vec<bo
 
 
         //  hour12 & isPM
-        let hour12 = dt.hour12();
+        let is_pm = dt.hour12();
 
-        let hour12_f = make_message(&addresses[6], vec![OscType::Float((hour12.1 as f32/12.0) as f32)]);
+        let hour12 = if is_pm.1 == 12 {0} else {is_pm.1};
+
+        let hour12_f = make_message(&addresses[6], vec![OscType::Float(((hour12 as f32/12.0) as f32) + ((minute as f32/60.0)/12.0))]);
         let hour12_i = make_message(&addresses[7], vec![OscType::Int((hour24) as i32)]);
 
-        let hour_is_pm = make_message(&addresses[8], vec![OscType::Bool((hour12.0) as bool)]);
+        let hour_is_pm = make_message(&addresses[8], vec![OscType::Bool((is_pm.0) as bool)]);
 
 
         // day
@@ -345,16 +347,17 @@ fn composition(addresses: Vec<String>, ip: String, port: u16,sync_toggle: Vec<bo
 
         send(second_f,&ip,port);
         send(second_i,&ip,port);
+        
+        send(hour24_f,&ip,port);
+        send(minute_f,&ip,port);
+        send(hour12_f,&ip,port);
 
         if sync_toggle[0] == true {
-            send(minute_f,&ip,port);
             send(minute_i,&ip,port);
         }
         if sync_toggle[1] == true {
-            send(hour24_f,&ip,port);
             send(hour24_i,&ip,port);
             send(hour_is_pm,&ip,port);
-            send(hour12_f,&ip,port);
             send(hour12_i,&ip,port);    
         }
         if sync_toggle[2] == true {
