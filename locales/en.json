@@ -1,0 +1,18 @@
+{
+    "_version": 1,
+    "repair_success": "Repaired!",
+    "repair_failed": "Failed to repair config.json. If config.json exists, try deleting it and running it.",
+    "press_any_key_to_continue": "Press any key to continue...",
+    "failed_to_read_line": "Failed to read line",
+    "press_ctrl+c_to_exit": "Ctrl+C to Exit",
+    "failed_to_load_config": "Failed to load config.json. Use the default settings instead.",
+    "how_to_repair_config": "Run `\\osc_clock.exe repair` to return config.json to its initial state.",
+    "listening_to_N": "Listening on %{address}",
+    "sending_to_N": "Sending on %{address}",
+    "failed_to_receive_data": "Failed to receive data",
+    "on_receive_packet_from_specific_address": "A packet received from a specific address:\t%{address}",
+    "parameters_synced": "Parameters Synced!\t(%{timestamp})",
+    "received_osc_bundle": "Received OSC Bundle: %{bundle}",
+    "error_decoding_OSC_message": "Error decoding OSC message: %{error}",
+    "debug_on_send_message": "Sending values to %{address} (%{timestamp})\t(Minute: %{minute} | Hour: %{hour} | Date: %{date})"
+}

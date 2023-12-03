@@ -1,0 +1,18 @@
+{
+    "_version": 1,
+    "repair_success": "修復しました",
+    "repair_failed": "config.json の修復に失敗しました。config.jsonが存在する場合、削除してから実行してみてください。",
+    "press_any_key_to_continue": "続行するには何かキーを押してください...",
+    "failed_to_read_line": "行の読み取りに失敗しました",
+    "press_ctrl+c_to_exit": "Ctrl+C で終了",
+    "failed_to_load_config": "config.json の読み込みに失敗しました。代わりにデフォルトの設定を使用します。",
+    "how_to_repair_config": "`\\osc_clock.exe repair` でconfig.jsonを初期状態に戻します。",
+    "listening_to_N": "%{address} からのパケットを受信します",
+    "sending_to_N": "%{address} に送信します",
+    "failed_to_receive_data": "データの受信に失敗しました",
+    "on_receive_packet_from_specific_address": "パラメータ同期判定アドレスからのパケットを受信:\t%{address}",
+    "parameters_synced": "同期しました\t(%{timestamp})",
+    "received_osc_bundle": "OSCバンドルを受信しました: %{bundle}",
+    "error_decoding_OSC_message": "OSCメッセージのデコードに失敗しました: %{error}",
+    "debug_on_send_message": "%{address} に値を送信 (%{timestamp})\t(分: %{minute} | 時間: %{hour} | 日付: %{date})"
+}

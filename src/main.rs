@@ -1,4 +1,9 @@
 extern crate rosc;
+
+#[macro_use]
+extern crate rust_i18n;
+i18n!("locales");
+
 use std::fmt::Debug;
 use std::thread;
 use serde::{Serialize, Deserialize};
@@ -9,11 +14,11 @@ use std::fs::File;
 use std::{env,fs};
 use std::io::{self, Read, Write};
 
-static VERSION: f32 = 0.3;
-
+static VERSION: f32 = 0.4;
 
 #[derive(Serialize, Deserialize, Debug,  Clone)]
 struct Config {
+    language: String,
     sender_ip: String,
     sender_port: u16,
     receiver_ip: String,
@@ -33,6 +38,7 @@ enum LogType {
 
 fn get_fallback_config() -> Config {
     let config = Config {
+        language: "en".to_string(),
         sender_ip: "127.0.0.1".to_string(),
         sender_port: 9000,
         receiver_ip: "127.0.0.1".to_string(),
@@ -90,38 +96,40 @@ fn repair_config_json() -> Result<bool, io::Error> {
 }
 
 fn main() {
+    
     //JSON修復用
     let args: Vec<String> = env::args().collect();
     if args.len() == 2 {
         if args[1] == "repair" {
             match repair_config_json() {
                 Ok(_) => {
-                    print_flush(print_log("修復しました".to_string(),LogType::INFO));
+                    print_flush(print_log(t!("repair_success").to_string(),LogType::INFO));
                 }
                 Err(_error) => {
-                    print_flush(print_log(format!("Err: config.json の修復に失敗しました。config.jsonが存在する場合、削除してから実行してみてください。{}",_error),LogType::ERROR));
+                    print_flush(print_log(t!("repair_failed"),LogType::ERROR));
                 }
             }
-            print!("続行するには何かキーを押してください...");
+            print!("{}",t!("press_any_key_to_continue"));
             io::stdout().flush().unwrap();
             let mut input = String::new();
-            io::stdin().read_line(&mut input).expect("Failed to read line");
+            io::stdin().read_line(&mut input).expect(&t!("failed_to_read_line"));
             return;
         }
     }
     // タイトル
     print!("OSC Clock v{0:.1}\n",VERSION);
-    print!("Ctrl+C で終了\n\n");
+    print!("{}\n\n",t!("press_ctrl+c_to_exit"));
 
     let  config;
     match read_config_json("./config.json") {
         Ok(result) => {
             
             config = result;
+            rust_i18n::set_locale(&config.language);
         }
         Err(_error) => {
-            print_flush(print_log("config.json の読み込みに失敗しました。代わりにデフォルトの設定を使用します。".to_string(),LogType::WARN));
-            print_flush(print_log("`\\osc_clock.exe repair` でconfig.jsonを初期状態に戻します。".to_string(),LogType::INFO));
+            print_flush(print_log(t!("failed_to_load_config").to_string(),LogType::WARN));
+            print_flush(print_log(t!("how_to_repair_config").to_string(),LogType::INFO));
             config = get_fallback_config();
         }
     }
@@ -142,11 +150,11 @@ fn main() {
         let receiver_address: SocketAddr = (thread0_receiver_ip.to_string() + ":" + &thread0_receiver_port.to_string()).parse().expect(&print_log("Failed to parse address".to_string(), LogType::ERROR));
         let socket = UdpSocket::bind(receiver_address).expect(&print_log("Failed to bind socket".to_string(), LogType::ERROR));
         
-        print_flush(print_log(format!("{} からのパケットを受信します", receiver_address),LogType::INFO));
+        print_flush(print_log(t!("listening_to_N",address = receiver_address),LogType::INFO));
     
         loop {
             let mut buf = [0; 2048];
-            let (size, _) = socket.recv_from(&mut buf).expect(&print_log("Failed to receive data".to_string(), LogType::ERROR));
+            let (size, _) = socket.recv_from(&mut buf).expect(&print_log(t!("failed_to_receive_data").to_string(), LogType::ERROR));
             match rosc::decoder::decode_udp(&buf[..size]) {
                 Ok(packet) => {
                     match packet {
@@ -166,22 +174,23 @@ fn main() {
                             if update {
                                 for n in 0..thread0_update_handle_addresses.len() {
                                     if msg.addr.to_string() == thread0_update_handle_addresses[n].to_string() {
-                                        print_flush(print_log(format!("パラメータ同期判定アドレスからのパケットを受信:\t{}", msg.addr.to_string()),LogType::EVENT));
+                                        print_flush(print_log(t!("on_receive_packet_from_specific_address", address = msg.addr.to_string()),LogType::EVENT));
                                         let sync_toggle = vec![true,true,true];
                                         composition(thread0_addresses.to_vec(),thread0_sender_ip.to_string(),thread0_sender_port,sync_toggle,false);
-                                        print_flush(print_log(format!("同期しました\t({})",Local::now().format("%Y-%m-%d %H:%M:%S")),LogType::SEND));
+                                        print_flush(print_log(t!("parameters_synced", timestamp = Local::now().format("%Y-%m-%d %H:%M:%S")),LogType::SEND));
                                         break;
                                     }
                                 }
                             }
                         }
                         (_,OscPacket::Bundle(bundle)) => {
-                            print_flush(print_log(format!("Received OSC Bundle: {:?}", bundle),LogType::INFO));
+                            print_flush(print_log(t!("received_osc_bundle",bundle = format!("{:?}", bundle)),LogType::INFO));
                         }
                     }
                 }
                 Err(err) => {
-                    print_flush(print_log(format!("Error decoding OSC message: {:?}", err),LogType::INFO));
+                    
+                    print_flush(print_log(t!("error_decoding_OSC_message",error = format!("{:?}", err)),LogType::INFO));
                 }
             }   
         }
@@ -189,7 +198,7 @@ fn main() {
 
     let thread1 = thread::spawn(move || {
         // 接続先
-        print_flush(print_log(format!("{}:{} に送信します",thread1_sender_ip,thread1_sender_port),LogType::INFO));
+        print_flush(print_log(t!("sending_to_N",address = format!("{}:{}",thread1_sender_ip,thread1_sender_port)),LogType::INFO));
 
         let mut dt = Local::now();
 
@@ -371,7 +380,14 @@ fn composition(addresses: Vec<String>, ip: String, port: u16,sync_toggle: Vec<bo
             send(year_3,&ip,port); 
         }
         if show_debug_log {
-            print_flush(print_log(format!("{0}:{1} に値を送信 ({2})\t(分: {3:<5} | 時間: {4:<5} | 日付: {5:<5})",ip,port,dt.format("%Y-%m-%d %H:%M:%S.%f"),sync_toggle[0],sync_toggle[1],sync_toggle[2]), LogType::SEND));
+            let str = t!("debug_on_send_message",
+                address = format!("{}:{}",ip,port),
+                timestamp = dt.format("%Y-%m-%d %H:%M:%S.%f"),
+                minute = format!("{:<5}",sync_toggle[0]),
+                hour = format!("{:<5}",sync_toggle[1]),
+                date = format!("{:<5}",sync_toggle[2]),
+            );
+            print_flush(print_log(str, LogType::SEND));
         }
 }
 
