@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <Layout
       title={`ホーム`}
-      description="Description will go into a meta tag in <head />">
+      description="OSC Clock のドキュメントサイト<head />">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

@@ -9,7 +9,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'OSC Clock',
-  tagline: 'OSC経由で日付と時刻をアバターに送信',
+  tagline: 'OSC経由で日付と時刻を VRChat に送信',
   favicon: './static/favicon.ico',
 
   // Set the production url of your site here
