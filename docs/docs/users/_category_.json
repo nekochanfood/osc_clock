@@ -1,0 +1,8 @@
+{
+  "label": "For Users",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "ユーザー向けのドキュメント"
+  }
+}
