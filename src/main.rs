@@ -81,7 +81,7 @@ fn repair_config_json() -> Result<bool, io::Error> {
         fs::remove_file("./config.json")?;
         file = File::create("./config.json")?;
     }else{
-        file = File::open("./config.json")?;
+        file = File::create("./config.json")?;
     }
     let json = serde_json::to_string_pretty(&get_fallback_config())?;
     file.write_all(json.as_bytes()).expect(&print_log("Failed to write to file".to_string(), LogType::ERROR));
@@ -99,7 +99,7 @@ fn main() {
                     print_flush(print_log("修復しました".to_string(),LogType::INFO));
                 }
                 Err(_error) => {
-                    print_flush(print_log("Err: config.json の修復に失敗しました。config.jsonが存在する場合、削除してから実行してみてください。".to_string(),LogType::ERROR));
+                    print_flush(print_log(format!("Err: config.json の修復に失敗しました。config.jsonが存在する場合、削除してから実行してみてください。{}",_error),LogType::ERROR));
                 }
             }
             print!("続行するには何かキーを押してください...");
