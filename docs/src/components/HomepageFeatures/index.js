@@ -4,32 +4,32 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: '簡単にアバターに実装',
+    Svg: require('@site/static/img/cube-duotone.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        実装方法にModular Avatarを使用しており、<br />
+        PrefabをアバターにD&Dするだけで実装できます。
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: '秒から年まで幅広く利用可能',
+    Svg: require('@site/static/img/app-window-duotone.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        秒や分の他、午前/午後や日付も利用できます。<br />
+        Float型やInt型の両方で利用可能な単位もあります。
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'サンプル腕時計付き',
+    Svg: require('@site/static/img/clock-duotone.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        どのように動作するか試してみてください！<br />
+        有料ですか？いいえ、無料です！
       </>
     ),
   },
