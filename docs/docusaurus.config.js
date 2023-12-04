@@ -65,17 +65,26 @@ const config = {
     ({
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
+      
       navbar: {
         title: 'OSC Clock',
         items: [
           {
+            
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
             label: 'ドキュメント',
           },
           {
+            href: 'vcc://vpm/addRepo?url=https://vpm.chanfoo.net/vpm.json',
+            className: 'button button--secondary button--bg header_button',
+            label: 'VCCに追加',
+            position: 'right',
+          },
+          {
             href: 'https://github.com/nekochanfood/osc_clock',
+            className: 'button button--secondary button--bg header_button',
             label: 'GitHub',
             position: 'right',
           },

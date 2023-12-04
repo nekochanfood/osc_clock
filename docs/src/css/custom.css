@@ -28,3 +28,18 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+.header_button {
+  color: var(--ifm-color-gray-900);
+  padding: 0px ,8px ,0px ,8px;
+}
+
+.header_button:hover,
+.header_button--active {
+      color: var(--ifm-color-gray-900);
+      text-decoration: none;
+    }
+
+.navbar__items--right {
+  gap: 16px;
+}
