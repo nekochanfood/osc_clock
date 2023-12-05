@@ -1,5 +1,5 @@
-# osc_clock
-Send date and time to your VRChat avatar via OSC
+# OSC Clock
+Send date and time to VRChat via OSC
 
 ## Available units
 Example DateTime: `2012/03/14 12:34:56`
