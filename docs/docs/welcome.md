@@ -21,7 +21,7 @@ OSC Clock はOSCを通して日付と時刻を VRChat に送信するプログ�
 ## リソースをインストールする
 
 :::danger
-OSC Clock のほとんどのリソースは、Modular Avatarを使用しているため、このリソースを使用するにはプロジェクトに Modular Avatar がインストールされている必要があります。
+OSC Clock のリソースのほとんどは、Modular Avatarを使用しているため、このリソースを使用するにはプロジェクトに Modular Avatar がインストールされている必要があります。
 
 [ここ](https://modular-avatar.nadena.dev/ja/docs/intro)の手順に従って、Modular Avatarをインストールしてください。
 :::
