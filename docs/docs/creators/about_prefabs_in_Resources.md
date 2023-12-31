@@ -44,6 +44,7 @@ sidebar_position: 10
 
 ## やってはいけないこと
 
+:::danger
 ### 値を Prefab 元から変更しないでください
 
 `Resources/Prefab`内にある Prefab を直接開いて変更を加えないでください。
@@ -51,10 +52,12 @@ sidebar_position: 10
 他の OSC Clock を使用しているアセットにも影響します。
 
 ヒエラルキー内の Prefabの値の変更は適用しなければ OK です。
+:::
 
+:::danger
 ### Unpack Prefab しないでください
 
 Unpack Prefabを行うと、後にこれらの Prefab に変更を加えたときに、その変更が適用されません。
-
+:::
 
 

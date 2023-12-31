@@ -18,6 +18,20 @@ OSC Clock はOSCを通して日付と時刻を VRChat に送信するプログ�
 [https://github.com/nekochanfood/osc_clock/releases](https://github.com/nekochanfood/osc_clock/releases/latest) から、最新版の OSC Clock をダウンロードすることができます。
 
 
-## リソースをダウンロードする
+## リソースをインストールする
 
-TODO: VCC経由で導入
+:::danger
+OSC Clock のほとんどのリソースは、Modular Avatarを使用しているため、このリソースを使用するにはプロジェクトに Modular Avatar がインストールされている必要があります。
+
+[ここ](https://modular-avatar.nadena.dev/ja/docs/intro)の手順に従って、Modular Avatarをインストールしてください。
+:::
+
+[ここ](vcc://vpm/addRepo?url=https://vpm.chanfoo.net/vpm.json)をクリックして、VCC に OSC Clock のレポジトリを追加します。
+
+"I understand, Add Repository" をクリックして、レポジトリを追加します。
+
+![レポジトリを追加](../static/img/add_repo.png)
+
+インストールしたいプロジェクトの管理画面を開き、"OSC Clock"と書かれているパッケージの "+" か、ドロップダウンから最新のバージョンをクリックしてインストールします。
+
+![パッケージを追加](../static/img/install_package.png)

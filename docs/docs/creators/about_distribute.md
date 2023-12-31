@@ -4,6 +4,17 @@ sidebar_position: 999
 
 # 再配布について
 
-OSC Clockの実行ファイルをアセットや商品ファイルに同梱させることは、許可していません。
+OSC Clockの実行ファイルやリソースを、商品に同梱させることは、許可していません。
 
-実行ファイルを [https://www.github.com/nekochanfood/osc_clock/releases/latest](https://www.github.com/nekochanfood/osc_clock/releases/latest) からダウンロードするように `readme.md` や インターネットショートカット等を用いて誘導し、もし既に実行ファイルを持っているならそれを使うよう、さらに記述していただけると幸いです。
+## リソース
+
+リソースは VCC を通してインストールすることが可能です。
+
+`readme.md` や インターネットショートカット等を用いて、[ここ](/docs/welcome)に書かれている手順に従ってインストールするように記述してください。
+
+## プログラム
+
+プログラムは、 [https://www.github.com/nekochanfood/osc_clock/releases/latest](https://www.github.com/nekochanfood/osc_clock/releases/latest) からダウンロードすることができます。
+
+`readme.md` や インターネットショートカット等を用いて、[ここ](/docs/welcome)に書かれている手順に従ってインストールするように記述してください。
+

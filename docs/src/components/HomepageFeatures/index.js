@@ -13,7 +13,7 @@ const FeatureList = [
         PrefabをアバターにD&Dするだけで実装できます。
       </>
     ),
-    to: "/docs/category/for-creators"
+    to: "/docs/creators/about_prefabs_in_Resources"
   },
   {
     title: '秒から年まで幅広く利用可能',
@@ -24,7 +24,7 @@ const FeatureList = [
         Float型やInt型の両方で利用可能な単位もあります。
       </>
     ),
-    to: "/docs/category/for-creators"
+    to: "/docs/creators/parameters"
   },
   {
     title: 'サンプル腕時計付き',
@@ -35,7 +35,7 @@ const FeatureList = [
         有料ですか？いいえ、無料です！
       </>
     ),
-    to: "/docs/category/for-creators"
+    to: "/docs/users/sample_asset"
   },
 ];
 
