@@ -10,7 +10,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'OSC Clock',
   tagline: 'OSC経由で日付と時刻を VRChat に送信',
-  favicon: './static/favicon.ico',
+  favicon: './static/img/favicon.ico',
 
   // Set the production url of your site here
   url: 'https://your-docusaurus-site.example.com',
