@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
+import Link from '@docusaurus/Link';
 
 const FeatureList = [
   {
@@ -12,6 +13,7 @@ const FeatureList = [
         PrefabをアバターにD&Dするだけで実装できます。
       </>
     ),
+    to: "/docs/category/for-creators"
   },
   {
     title: '秒から年まで幅広く利用可能',
@@ -22,6 +24,7 @@ const FeatureList = [
         Float型やInt型の両方で利用可能な単位もあります。
       </>
     ),
+    to: "/docs/category/for-creators"
   },
   {
     title: 'サンプル腕時計付き',
@@ -32,10 +35,11 @@ const FeatureList = [
         有料ですか？いいえ、無料です！
       </>
     ),
+    to: "/docs/category/for-creators"
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({Svg, title, description,to}) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
@@ -44,6 +48,15 @@ function Feature({Svg, title, description}) {
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>
         <p>{description}</p>
+      </div>
+      <div>
+          <center>
+            <Link
+              className="ToCenter button button--secondary button--lg"
+              to={to}>
+              詳しく見る
+            </Link>
+          </center>
       </div>
     </div>
   );

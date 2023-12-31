@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <Layout
       title={`ホーム`}
-      description="OSC Clock のドキュメントサイト<head />">
+      description="OSC Clock のドキュメントサイト">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

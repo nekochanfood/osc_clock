@@ -4,11 +4,13 @@ sidebar_position: 999
 
 # トラブルシューティング
 
-### `You are trying to replace or create~` というエラーが発生する
+OSC Clock を使用して問題が発生したときはここを見てください。
+
+### Unity にて、`You are trying to replace or create~` というエラーが発生する
 
 [Modular Avatar](https://modular-avatar.nadena.dev/ja) を導入してください。
 
-### パラメータが更新されない
+### アバターのパラメータ(ギミック)が更新されない / 反映されない
 
 既にアップロードされているアバターに OSC Clock を導入すると、パラメータが更新されない問題があります。
 
@@ -22,3 +24,5 @@ sidebar_position: 999
 ### `config.json` を破壊してしまった
 
 `.\osc_clock.json repair` を実行することで、config.jsonを修復・生成することができます。
+
+これを実行してさらにエラーが出た場合、config.jsonが存在するならそれを削除してください。
