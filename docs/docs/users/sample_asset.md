@@ -14,6 +14,14 @@ OSC Clock のリソース内にはサンプルアセットの腕時計が付属�
 
 ## アバターに追加する
 
+:::warning
+
+この腕時計のマテリアルに、lilToonを使用しています。
+
+インストールしていない場合は、[ここ](https://lilxyzw.github.io/lilToon/#/)からインストールしてください。
+
+:::
+
 OSC Clock のリソースフォルダは`Assets`ではなく、`Packages`フォルダ内にあります！
 
 ![Alt text](../../static/img/prefab_location.png)
