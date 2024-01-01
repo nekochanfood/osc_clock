@@ -10,11 +10,11 @@ OSC Clockのプログラムやリソースを、商品に同梱させたり、�
 
 リソースは VCC を通してインストールすることが可能です。
 
-`readme.md` や インターネットショートカット等を用いて、[ここ](/docs/welcome)に書かれている手順に従ってインストールするように記述してください。
+`readme.txt` や インターネットショートカット等を用いて、[ここ](/docs/welcome)に書かれている手順に従ってインストールするように記述してください。
 
 ## プログラム
 
 プログラムは、 [https://www.github.com/nekochanfood/osc_clock/releases/latest](https://www.github.com/nekochanfood/osc_clock/releases/latest) からダウンロードすることができます。
 
-`readme.md` や インターネットショートカット等を用いて、[ここ](/docs/welcome)に書かれている手順に従ってインストールするように記述してください。
+`readme.txt` や インターネットショートカット等を用いて、[ここ](/docs/welcome)に書かれている手順に従ってインストールするように記述してください。
 
