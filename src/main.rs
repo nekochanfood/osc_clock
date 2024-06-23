@@ -14,7 +14,7 @@ use std::fs::File;
 use std::{env,fs};
 use std::io::{self, Read, Write};
 
-static VERSION: f32 = 0.4;
+static VERSION: f32 = 1.0;
 
 #[derive(Serialize, Deserialize, Debug,  Clone)]
 struct Config {
@@ -24,6 +24,9 @@ struct Config {
     receiver_ip: String,
     receiver_port: u16,
     show_debug_log: bool,
+    send_all_value_every_time: bool,
+    check_rate_ms: u64,
+    restrict_send_rate: bool,
     addresses: Vec<String>,
     update_handle_addresses: Vec<String>,
 }
@@ -44,6 +47,9 @@ fn get_fallback_config() -> Config {
         receiver_ip: "127.0.0.1".to_string(),
         receiver_port: 9001,
         show_debug_log: false,
+        send_all_value_every_time: false,
+        check_rate_ms: 1,
+        restrict_send_rate: true,
         addresses: vec![
             "/avatar/parameters/osc_clock@second_f".to_string(),
             "/avatar/parameters/osc_clock@second_i".to_string(),
@@ -118,7 +124,6 @@ fn main() {
     }
     // タイトル
     print!("OSC Clock v{0:.1}\n",VERSION);
-    print!("{}\n\n",t!("press_ctrl+c_to_exit"));
 
     let  config;
     match read_config_json("./config.json") {
@@ -134,6 +139,22 @@ fn main() {
         }
     }
 
+    print!("{}\n\n",t!("press_ctrl+c_to_exit"));
+
+    if config.send_all_value_every_time {
+        print_flush(print_log(t!("warning_send_all_value").to_string(),LogType::WARN));
+    }
+
+    if !config.restrict_send_rate {
+        print_flush(print_log(t!("warning_restrict_send_rate").to_string(),LogType::WARN));
+    }
+
+    if config.check_rate_ms == 0 {
+        print_flush(print_log(t!("warning_check_rate_ms_zero").to_string(),LogType::WARN));
+    }else if config.check_rate_ms > 100 {
+        print_flush(print_log(t!("warning_check_rate_ms_too_much").to_string(),LogType::WARN));
+    }
+    
     let thread0_sender_ip = config.sender_ip.clone();
     let thread0_sender_port = config.sender_port.clone();
     let thread0_receiver_ip = config.receiver_ip.clone();
@@ -145,6 +166,9 @@ fn main() {
     let thread1_sender_port = config.sender_port.clone();
     let thread1_addresses = config.addresses.clone();
     let thread1_show_debug_log = config.show_debug_log.clone();
+    let thread1_send_all_value_every_time = config.send_all_value_every_time.clone();
+    let thread1_check_rate_ms = config.check_rate_ms.clone();
+    let thread1_restrict_send_rate = config.restrict_send_rate.clone();
 
     let thread0 = thread::spawn(move || {
         let receiver_address: SocketAddr = (thread0_receiver_ip.to_string() + ":" + &thread0_receiver_port.to_string()).parse().expect(&print_log("Failed to parse address".to_string(), LogType::ERROR));
@@ -219,28 +243,36 @@ fn main() {
             let send_hour: bool;
             let send_day: bool;
 
-            while dt.second() == current_second {
-                thread::sleep(std::time::Duration::from_millis(10));
+            while thread1_restrict_send_rate && dt.second() == current_second {
+                thread::sleep(std::time::Duration::from_millis(thread1_check_rate_ms));
                 dt = Local::now();
             }
-            if dt.minute() != current_minute {
+
+            if thread1_send_all_value_every_time {
                 send_minute = true;
-                current_minute = dt.minute();
-            }else{
-                send_minute = false;
-            }
-            if dt.hour() != current_hour {
                 send_hour = true;
-                current_hour = dt.hour();
-            }else{
-                send_hour = false;
-            }
-            if dt.day() != current_day {
                 send_day = true;
-                current_day = dt.day();
             }else{
-                send_day = false;
+                if dt.minute() != current_minute {
+                    send_minute = true;
+                    current_minute = dt.minute();
+                }else{
+                    send_minute = false;
+                }
+                if dt.hour() != current_hour {
+                    send_hour = true;
+                    current_hour = dt.hour();
+                }else{
+                    send_hour = false;
+                }
+                if dt.day() != current_day {
+                    send_day = true;
+                    current_day = dt.day();
+                }else{
+                    send_day = false;
+                }
             }
+            
             let sync_toggle = vec![send_minute,send_hour,send_day];
             composition(thread1_addresses.to_vec(),thread1_sender_ip.to_string(),thread1_sender_port,sync_toggle,thread1_show_debug_log);
             current_second = dt.second();

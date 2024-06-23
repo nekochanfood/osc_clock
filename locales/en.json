@@ -14,5 +14,9 @@
     "parameters_synced": "Parameters Synced!\t(%{timestamp})",
     "received_osc_bundle": "Received OSC Bundle: %{bundle}",
     "error_decoding_OSC_message": "Error decoding OSC message: %{error}",
-    "debug_on_send_message": "Sending values to %{address} (%{timestamp})\t(Minute: %{minute} | Hour: %{hour} | Date: %{date})"
+    "debug_on_send_message": "Sending values to %{address} (%{timestamp})\t(Minute: %{minute} | Hour: %{hour} | Date: %{date})",
+    "warning_send_all_value": "The setting to send all values each time is effective. This may increase communication volume, but avoids unexpected failure of parameter synchronization.",
+    "warning_restrict_send_rate": "Update rate throttling is disabled. We strongly recommend enabling this setting as it is very CPU intensive.",
+    "warning_check_rate_ms_zero": "The check rate value is 0. It is very CPU intensive so a value of 1 or higher is highly recommended.",
+    "warning_check_rate_ms_too_much": "The check rate value is greater than 100. There may be a discrepancy in the timing of date and time updates."
 }
