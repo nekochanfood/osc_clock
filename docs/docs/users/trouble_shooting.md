@@ -23,6 +23,6 @@ OSC Clock を使用して問題が発生したときはここを見てくださ�
 
 ### `config.json` を破壊してしまった
 
-`.\osc_clock.json repair` を実行することで、config.jsonを修復・生成することができます。
+`.\osc_clock.exe repair` を実行することで、config.jsonを修復・生成することができます。
 
 これを実行してさらにエラーが出た場合、config.jsonが存在するならそれを削除してください。
