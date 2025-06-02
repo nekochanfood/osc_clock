@@ -19,7 +19,6 @@ pub struct Config {
     pub send_all_value_every_time: bool,
     pub check_rate_ms: u64,
     pub restrict_send_rate: bool,
-    pub use_osc_query: bool,
     pub addresses: Vec<String>,
     pub update_handle_addresses: Vec<String>,
 }
@@ -36,7 +35,6 @@ impl Default for Config {
             send_all_value_every_time: false,
             check_rate_ms: 1,
             restrict_send_rate: true,
-            use_osc_query: false,
             addresses: vec![
                 "/avatar/parameters/osc_clock@second_f".to_string(),
                 "/avatar/parameters/osc_clock@second_i".to_string(),
@@ -120,9 +118,6 @@ pub fn load_config() -> Config {
         print_flush(print_log(t!("warning_check_rate_ms_zero").to_string(), LogType::WARN));
     } else if config.check_rate_ms > 100 {
         print_flush(print_log(t!("warning_check_rate_ms_too_much").to_string(), LogType::WARN));
-    }
-    if config.use_osc_query {
-        print_flush(print_log(t!("warning_use_osc_query").to_string(), LogType::WARN));
     }
     
     return config;

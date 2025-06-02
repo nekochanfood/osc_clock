@@ -24,6 +24,7 @@ static VERSION: f32 = 1.0;
 async fn main() {
     // Title
     print!("OSC Clock v{0:.1}\n", VERSION);
+    print!("{}\n\n",t!("press_ctrl+c_to_exit"));
 
     // Load configuration
     let config = load_config();
@@ -40,6 +41,4 @@ async fn main() {
     });
 
     let _ = tokio::join!(sender_task, receiver_task);
-
-    print!("{}\n\n",t!("press_ctrl+c_to_exit"));
 }
