@@ -18,5 +18,6 @@
     "warning_send_all_value": "毎回すべての値を送る設定が有効です。これは通信量が増える可能性がありますが、パラメーター同期の予期せぬ失敗を避けることができます。",
     "warning_restrict_send_rate": "更新レートの抑制が無効です。CPUを非常に使用するため、この設定を有効にすることを強くおすすめします。",
     "warning_check_rate_ms_zero": "レートの値が 0 です。CPUを非常に使用するため、値を 1 以上にすることを強くおすすめします。",
-    "warning_check_rate_ms_too_much": "レートの値が 100 より多いです。日付と時刻の更新のタイミングにズレが生じる可能性があります。"
+    "warning_check_rate_ms_too_much": "レートの値が 100 より多いです。日付と時刻の更新のタイミングにズレが生じる可能性があります。",
+    "warning_use_osc_query": "OSC Queryが有効です。これは、OSC Queryをサポートするアプリケーションでのみ機能します。"
 }

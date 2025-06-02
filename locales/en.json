@@ -18,5 +18,6 @@
     "warning_send_all_value": "The setting to send all values each time is effective. This may increase communication volume, but avoids unexpected failure of parameter synchronization.",
     "warning_restrict_send_rate": "Update rate throttling is disabled. We strongly recommend enabling this setting as it is very CPU intensive.",
     "warning_check_rate_ms_zero": "The check rate value is 0. It is very CPU intensive so a value of 1 or higher is highly recommended.",
-    "warning_check_rate_ms_too_much": "The check rate value is greater than 100. There may be a discrepancy in the timing of date and time updates."
+    "warning_check_rate_ms_too_much": "The check rate value is greater than 100. There may be a discrepancy in the timing of date and time updates.",
+    "warning_use_osc_query": "OSC Query is enabled. This will only work with applications that support OSC Query."
 }
