@@ -90,6 +90,7 @@ pub fn send(message: OscMessage, ip: &str, port: u16) {
     if CONFIG.lock().unwrap().show_debug_log {
         let str = t!(
             "debug_on_send_message",
+            address = format!("{}:{}", ip, port),
             timestamp = Local::now().format("%Y-%m-%d %H:%M:%S.%f")
         );
         print_flush(print_log(str, LogType::SEND));
