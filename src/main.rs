@@ -21,7 +21,7 @@ use vrchat_osc::{ Error };
 
 mod osc_query;
 
-static VERSION: f32 = 1.0;
+static VERSION: f32 = 1.1;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
