@@ -1,10 +1,11 @@
 use chrono::Local;
-use rosc::{ OscPacket, OscType };
+use rosc::{ OscMessage, OscPacket, OscType };
 use std::net::{ UdpSocket, SocketAddr };
 
-use crate::config::{CONFIG};
+use crate::config::{ Config, CONFIG };
 use crate::log::{ print_log, print_flush, LogType };
-use crate::message::composition;
+use crate::message::{ build, BuilderParams };
+use crate::sender::send;
 
 pub async fn receiver() {
     let mut config = CONFIG.lock().unwrap().clone();
@@ -31,54 +32,15 @@ pub async fn receiver() {
             Ok(packet) => {
                 match packet {
                     (_, OscPacket::Message(msg)) => {
-                        let update: bool;
-                        match msg.args[0] {
-                            OscType::Bool(b) => {
-                                if b {
-                                    update = true;
-                                } else {
-                                    update = false;
-                                }
-                            }
-                            _ => {
-                                update = true;
-                            }
-                        }
-                        if update {
-                            for n in 0..config.update_handle_addresses.len() {
-                                if
-                                    msg.addr.to_string() ==
-                                    config.update_handle_addresses[n].to_string()
-                                {
-                                    config = CONFIG.lock().unwrap().clone();
-                                    print_flush(
-                                        print_log(
-                                            t!(
-                                                "on_receive_packet_from_specific_address",
-                                                address = msg.addr.to_string()
-                                            ),
-                                            LogType::EVENT
-                                        )
-                                    );
-                                    let sync_toggle = vec![true, true, true];
-                                    composition(
-                                        config.addresses.to_vec(),
-                                        config.sender_ip.to_string(),
-                                        config.sender_port,
-                                        sync_toggle,
-                                        false
-                                    );
-                                    print_flush(
-                                        print_log(
-                                            t!(
-                                                "parameters_synced",
-                                                timestamp = Local::now().format("%Y-%m-%d %H:%M:%S")
-                                            ),
-                                            LogType::SEND
-                                        )
-                                    );
-                                    break;
-                                }
+                        config = CONFIG.lock().unwrap().clone();
+                        if check(msg.clone(), config.clone()) {
+                            let sync_toggle = vec![true, true, true];
+                            let messages = build(BuilderParams {
+                                addresses: config.addresses.to_vec(),
+                                sync_toggle,
+                            });
+                            for message in messages {
+                                send(message, &config.sender_ip, config.sender_port);
                             }
                         }
                     }
@@ -102,4 +64,48 @@ pub async fn receiver() {
             }
         }
     }
+}
+
+pub fn check(msg: OscMessage, config: Config) -> bool {
+    let update: bool;
+
+    match msg.args[0] {
+        OscType::Bool(b) => {
+            if b {
+                update = true;
+            } else {
+                update = false;
+            }
+        }
+        _ => {
+            update = true;
+        }
+    }
+    if update {
+        for n in 0..config.update_handle_addresses.len() {
+            if msg.addr.to_string() == config.update_handle_addresses[n].to_string() {
+                print_flush(
+                    print_log(
+                        t!(
+                            "on_receive_packet_from_specific_address",
+                            address = msg.addr.to_string()
+                        ),
+                        LogType::EVENT
+                    )
+                );
+                print_flush(
+                    print_log(
+                        t!(
+                            "parameters_synced",
+                            timestamp = Local::now().format("%Y-%m-%d %H:%M:%S")
+                        ),
+                        LogType::SEND
+                    )
+                );
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

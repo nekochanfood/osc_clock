@@ -1,12 +1,13 @@
 use chrono::{ Local, Timelike, Datelike };
+use rosc::{ OscPacket, OscMessage };
+use std::net::{ UdpSocket, SocketAddr };
 
 use crate::log::{ print_log, print_flush, LogType };
-use crate::config::{CONFIG};
+use crate::config::{ CONFIG };
 use std::thread;
-use crate::message::composition;
+use crate::message::{ build, BuilderParams };
 
 pub async fn sender() {
-    
     let mut config = CONFIG.lock().unwrap().clone();
 
     print_flush(
@@ -68,13 +69,33 @@ pub async fn sender() {
         }
 
         let sync_toggle = vec![send_minute, send_hour, send_day];
-        composition(
-            config.addresses.to_vec(),
-            config.sender_ip.to_string(),
-            config.sender_port,
+        let messages = build(BuilderParams {
+            addresses: config.addresses.to_vec(),
             sync_toggle,
-            config.show_debug_log
-        );
+        });
+        for message in messages {
+            send(message, &config.sender_ip, config.sender_port);
+        }
         current_second = dt.second();
+    }
+}
+
+// 送信用
+pub fn send(message: OscMessage, ip: &str, port: u16) {
+    let socket = UdpSocket::bind("0.0.0.0:0").unwrap();
+    let addr = SocketAddr::new(ip.parse().unwrap(), port);
+
+    let packet = OscPacket::Message(message);
+    let encoded_packet = rosc::encoder::encode(&packet).unwrap();
+
+    socket.send_to(&encoded_packet, addr).unwrap();
+
+    if CONFIG.lock().unwrap().show_debug_log {
+        let str = t!(
+            "debug_on_send_message",
+            address = format!("{}:{}", ip, port),
+            timestamp = Local::now().format("%Y-%m-%d %H:%M:%S.%f")
+        );
+        print_flush(print_log(str, LogType::SEND));
     }
 }
