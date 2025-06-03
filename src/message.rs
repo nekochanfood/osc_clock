@@ -21,13 +21,7 @@ pub fn build(params: BuilderParams) -> Vec<OscMessage> {
         print_flush(print_log(str, LogType::SEND));
     }
 
-    let mut messages: Vec<OscMessage> = params.addresses
-        .iter()
-        .map(|addr| OscMessage {
-            addr: addr.clone(),
-            args: vec![],
-        })
-        .collect();
+    let mut messages: Vec<OscMessage> = Vec::new();
 
     // second
     let second = dt.second();
@@ -101,6 +95,8 @@ pub fn build(params: BuilderParams) -> Vec<OscMessage> {
         messages.push(make_message(&params.addresses[15], vec![OscType::Int(((year % 100) / 10) as i32)]));
         messages.push(make_message(&params.addresses[16], vec![OscType::Int((year % 10) as i32)]));
     }
+
+    print_flush(format!("{}", messages.len()));
 
     return messages;
 }

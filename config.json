@@ -6,7 +6,7 @@
     "receiver_ip": "127.0.0.1",
     "receiver_port": 9001,
     "show_debug_log": false,
-    "send_all_value_every_time":true,
+    "send_all_value_every_time":false,
     "check_rate_ms": 1,
     "restrict_send_rate": true,
     "addresses": [
