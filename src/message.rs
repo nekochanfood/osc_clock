@@ -96,8 +96,6 @@ pub fn build(params: BuilderParams) -> Vec<OscMessage> {
         messages.push(make_message(&params.addresses[16], vec![OscType::Int((year % 10) as i32)]));
     }
 
-    print_flush(format!("{}", messages.len()));
-
     return messages;
 }
 
