@@ -62,12 +62,10 @@ impl Default for Config {
     }
 }
 
-pub static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| {
-    Mutex::new(load_config())
-});
+pub static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| { Mutex::new(load_config()) });
 
 pub fn init_config() {
-    Lazy::force(&CONFIG); // これがポイント！
+    Lazy::force(&CONFIG);
 }
 
 pub fn get_fallback_config() -> Config {
@@ -130,26 +128,30 @@ fn load_config() -> Config {
     } else if config.check_rate_ms > 100 {
         print_flush(print_log(t!("warning_check_rate_ms_too_much").to_string(), LogType::WARN));
     }
-    
+
+    if config.use_osc_clock {
+        print_flush(print_log(t!("warning_osc_query_enabled").to_string(), LogType::INFO));
+    }
+
     return config;
 }
 
-pub fn set_sender_ip(ip: &str) {
-    let mut cfg = CONFIG.lock().unwrap();
-    cfg.sender_ip = ip.to_string();
-}
+// pub fn set_sender_ip(ip: &str) {
+//     let mut cfg = CONFIG.lock().unwrap();
+//     cfg.sender_ip = ip.to_string();
+// }
 
-pub fn set_receiver_ip(ip: &str) {
-    let mut cfg = CONFIG.lock().unwrap();
-    cfg.receiver_ip = ip.to_string();
-}
+// pub fn set_receiver_ip(ip: &str) {
+//     let mut cfg = CONFIG.lock().unwrap();
+//     cfg.receiver_ip = ip.to_string();
+// }
 
-pub fn set_sender_port(port: u16) {
-    let mut cfg = CONFIG.lock().unwrap();
-    cfg.sender_port = port;
-}
+// pub fn set_sender_port(port: u16) {
+//     let mut cfg = CONFIG.lock().unwrap();
+//     cfg.sender_port = port;
+// }
 
-pub fn set_receiver_port(port: u16) {
-    let mut cfg = CONFIG.lock().unwrap();
-    cfg.receiver_port = port;
-}
+// pub fn set_receiver_port(port: u16) {
+//     let mut cfg = CONFIG.lock().unwrap();
+//     cfg.receiver_port = port;
+// }

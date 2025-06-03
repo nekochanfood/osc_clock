@@ -19,5 +19,8 @@
     "warning_restrict_send_rate": "Update rate throttling is disabled. We strongly recommend enabling this setting as it is very CPU intensive.",
     "warning_check_rate_ms_zero": "The check rate value is 0. It is very CPU intensive so a value of 1 or higher is highly recommended.",
     "warning_check_rate_ms_too_much": "The check rate value is greater than 100. There may be a discrepancy in the timing of date and time updates.",
-    "warning_use_osc_query": "OSC Query is enabled. This will only work with applications that support OSC Query."
+    "warning_osc_query_enabled": "OSC Query is enabled. This will only work with applications that support OSC Query.",
+    "on_connect_to_osc_server": "Connected to OSC server %{name} (%{address})",
+    "on_connect_to_osc_query_server": "Connected to OSC Query server %{name} (%{address})",
+    "osc_query_service_registered": "Registered to OSC Query service (%{name})"
 }

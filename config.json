@@ -1,6 +1,6 @@
 {
     "language": "ja",
-    "use_osc_clock": false,
+    "use_osc_clock": true,
     "sender_ip": "127.0.0.1",
     "sender_port": 9000,
     "receiver_ip": "127.0.0.1",

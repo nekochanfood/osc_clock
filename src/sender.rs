@@ -19,24 +19,22 @@ pub async fn sender() {
 
     let mut dt = Local::now();
 
-    // 比較用
     let mut current_second = dt.second();
     let mut current_minute = u32::MAX;
     let mut current_hour = u32::MAX;
     let mut current_day = u32::MAX;
 
-    // .000 秒まで待つ
     while dt.second() == current_second {
         thread::sleep(std::time::Duration::from_millis(10));
         dt = Local::now();
     }
 
     loop {
+        config = CONFIG.lock().unwrap().clone();
+
         let send_minute: bool;
         let send_hour: bool;
         let send_day: bool;
-
-        config = CONFIG.lock().unwrap().clone();
 
         while config.restrict_send_rate && dt.second() == current_second {
             thread::sleep(std::time::Duration::from_millis(config.check_rate_ms));
@@ -80,7 +78,6 @@ pub async fn sender() {
     }
 }
 
-// 送信用
 pub fn send(message: OscMessage, ip: &str, port: u16) {
     let socket = UdpSocket::bind("0.0.0.0:0").unwrap();
     let addr = SocketAddr::new(ip.parse().unwrap(), port);
@@ -93,7 +90,6 @@ pub fn send(message: OscMessage, ip: &str, port: u16) {
     if CONFIG.lock().unwrap().show_debug_log {
         let str = t!(
             "debug_on_send_message",
-            address = format!("{}:{}", ip, port),
             timestamp = Local::now().format("%Y-%m-%d %H:%M:%S.%f")
         );
         print_flush(print_log(str, LogType::SEND));

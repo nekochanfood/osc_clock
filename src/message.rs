@@ -1,6 +1,6 @@
 use chrono::{ Local, Timelike, Datelike };
 use rosc::{ OscMessage, OscType };
-use crate::{config::CONFIG, log::{ print_flush, print_log, LogType }};
+use crate::{ config::CONFIG, log::{ print_flush, print_log, LogType } };
 
 pub struct BuilderParams {
     pub addresses: Vec<String>,
@@ -44,7 +44,10 @@ pub fn build(params: BuilderParams) -> Vec<OscMessage> {
         // hour24
         let hour24 = dt.hour();
         messages.push(
-            make_message(&params.addresses[4], vec![OscType::Float(((hour24 as f32) / 24.0) as f32)])
+            make_message(
+                &params.addresses[4],
+                vec![OscType::Float(((hour24 as f32) / 24.0) as f32)]
+            )
         );
         messages.push(make_message(&params.addresses[5], vec![OscType::Int(hour24 as i32)]));
 
@@ -88,11 +91,15 @@ pub fn build(params: BuilderParams) -> Vec<OscMessage> {
         messages.push(make_message(&params.addresses[12], vec![OscType::Int(year as i32)]));
 
         // splitted year
-        messages.push(make_message(&params.addresses[13], vec![OscType::Int((year / 1000) as i32)]));
+        messages.push(
+            make_message(&params.addresses[13], vec![OscType::Int((year / 1000) as i32)])
+        );
         messages.push(
             make_message(&params.addresses[14], vec![OscType::Int(((year % 1000) / 100) as i32)])
         );
-        messages.push(make_message(&params.addresses[15], vec![OscType::Int(((year % 100) / 10) as i32)]));
+        messages.push(
+            make_message(&params.addresses[15], vec![OscType::Int(((year % 100) / 10) as i32)])
+        );
         messages.push(make_message(&params.addresses[16], vec![OscType::Int((year % 10) as i32)]));
     }
 
