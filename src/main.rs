@@ -5,7 +5,7 @@ extern crate rust_i18n;
 i18n!("locales");
 
 mod config;
-use config::{ load_config };
+use config::{ init_config, CONFIG, set_sender_port };
 
 mod log;
 
@@ -27,17 +27,14 @@ async fn main() {
     print!("{}\n\n",t!("press_ctrl+c_to_exit"));
 
     // Load configuration
-    let config = load_config();
-
-    let sender_config = config.clone();
-    let receiver_config = config.clone();
+    init_config();
 
     let sender_task = tokio::spawn(async move {
-        sender(sender_config).await;
+        sender().await;
     });
 
     let receiver_task = tokio::spawn(async move {
-        receiver(receiver_config).await;
+        receiver().await;
     });
 
     let _ = tokio::join!(sender_task, receiver_task);

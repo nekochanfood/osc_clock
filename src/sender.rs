@@ -1,12 +1,14 @@
 use chrono::{ Local, Timelike, Datelike };
 
 use crate::log::{ print_log, print_flush, LogType };
-use crate::config::Config;
+use crate::config::{CONFIG};
 use std::thread;
 use crate::message::composition;
 
-pub async fn sender(config: Config) {
-    // 接続先
+pub async fn sender() {
+    
+    let mut config = CONFIG.lock().unwrap().clone();
+
     print_flush(
         print_log(
             t!("sending_to_N", address = format!("{}:{}", config.sender_ip, config.sender_port)),
@@ -32,6 +34,8 @@ pub async fn sender(config: Config) {
         let send_minute: bool;
         let send_hour: bool;
         let send_day: bool;
+
+        config = CONFIG.lock().unwrap().clone();
 
         while config.restrict_send_rate && dt.second() == current_second {
             thread::sleep(std::time::Duration::from_millis(config.check_rate_ms));

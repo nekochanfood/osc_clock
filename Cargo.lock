@@ -918,6 +918,7 @@ name = "osc_clock"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "once_cell",
  "rosc",
  "rust-i18n",
  "serde",

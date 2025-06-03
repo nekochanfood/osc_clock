@@ -2,11 +2,13 @@ use chrono::Local;
 use rosc::{ OscPacket, OscType };
 use std::net::{ UdpSocket, SocketAddr };
 
-use crate::config::Config;
+use crate::config::{CONFIG};
 use crate::log::{ print_log, print_flush, LogType };
 use crate::message::composition;
 
-pub async fn receiver(config: Config) {
+pub async fn receiver() {
+    let mut config = CONFIG.lock().unwrap().clone();
+
     let receiver_address: SocketAddr = (
         config.receiver_ip.to_string() +
         ":" +
@@ -48,6 +50,7 @@ pub async fn receiver(config: Config) {
                                     msg.addr.to_string() ==
                                     config.update_handle_addresses[n].to_string()
                                 {
+                                    config = CONFIG.lock().unwrap().clone();
                                     print_flush(
                                         print_log(
                                             t!(

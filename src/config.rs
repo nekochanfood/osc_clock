@@ -3,7 +3,8 @@ use serde::{ Serialize, Deserialize };
 use std::fs::File;
 use std::{ fs };
 use std::io::{ self, Read, Write };
-
+use std::sync::Mutex;
+use once_cell::sync::Lazy;
 use crate::log::{ print_log, LogType };
 use crate::recovery::check_repair;
 use crate::log::print_flush;
@@ -59,6 +60,14 @@ impl Default for Config {
     }
 }
 
+pub static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| {
+    Mutex::new(load_config())
+});
+
+pub fn init_config() {
+    Lazy::force(&CONFIG); // これがポイント！
+}
+
 pub fn get_fallback_config() -> Config {
     let config = Config::default();
     return config;
@@ -91,7 +100,7 @@ pub fn repair_config_json() -> Result<bool, io::Error> {
     Ok(true)
 }
 
-pub fn load_config() -> Config {
+fn load_config() -> Config {
     let config;
     check_repair();
     match read_config_json("./config.json") {
@@ -121,4 +130,24 @@ pub fn load_config() -> Config {
     }
     
     return config;
+}
+
+pub fn set_sender_ip(ip: &str) {
+    let mut cfg = CONFIG.lock().unwrap();
+    cfg.sender_ip = ip.to_string();
+}
+
+pub fn set_receiver_ip(ip: &str) {
+    let mut cfg = CONFIG.lock().unwrap();
+    cfg.receiver_ip = ip.to_string();
+}
+
+pub fn set_sender_port(port: u16) {
+    let mut cfg = CONFIG.lock().unwrap();
+    cfg.sender_port = port;
+}
+
+pub fn set_receiver_port(port: u16) {
+    let mut cfg = CONFIG.lock().unwrap();
+    cfg.receiver_port = port;
 }
