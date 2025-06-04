@@ -32,7 +32,7 @@ async fn main() -> Result<(), Error> {
     // Load configuration
     init_config();
 
-    if CONFIG.lock().unwrap().use_osc_clock {
+    if CONFIG.lock().unwrap().use_osc_query {
         osc_query::start().await?;
     } else {
         legacy::start().await;

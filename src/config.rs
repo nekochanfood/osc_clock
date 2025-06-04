@@ -12,7 +12,7 @@ use crate::log::print_flush;
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
     pub language: String,
-    pub use_osc_clock: bool,
+    pub use_osc_query: bool,
     pub sender_ip: String,
     pub sender_port: u16,
     pub receiver_ip: String,
@@ -29,7 +29,7 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             language: "en".to_string(),
-            use_osc_clock: false,
+            use_osc_query: false,
             sender_ip: "127.0.0.1".to_string(),
             sender_port: 9000,
             receiver_ip: "127.0.0.1".to_string(),
@@ -129,7 +129,7 @@ fn load_config() -> Config {
         print_flush(print_log(t!("warning_check_rate_ms_too_much").to_string(), LogType::WARN));
     }
 
-    if config.use_osc_clock {
+    if config.use_osc_query {
         print_flush(print_log(t!("warning_osc_query_enabled").to_string(), LogType::INFO));
     }
 

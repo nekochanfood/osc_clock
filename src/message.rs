@@ -18,7 +18,7 @@ pub fn build(params: BuilderParams) -> Vec<OscMessage> {
             hour = format!("{:<5}", params.sync_toggle[1]),
             date = format!("{:<5}", params.sync_toggle[2])
         );
-        print_flush(print_log(str, LogType::SEND));
+        print_flush(print_log(str, LogType::INFO));
     }
 
     let mut messages: Vec<OscMessage> = Vec::new();

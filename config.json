@@ -1,12 +1,12 @@
 {
     "language": "ja",
-    "use_osc_clock": true,
+    "use_osc_query": true,
     "sender_ip": "127.0.0.1",
     "sender_port": 9000,
     "receiver_ip": "127.0.0.1",
     "receiver_port": 9001,
-    "show_debug_log": false,
-    "send_all_value_every_time":false,
+    "show_debug_log": true,
+    "send_all_value_every_time": false,
     "check_rate_ms": 1,
     "restrict_send_rate": true,
     "addresses": [

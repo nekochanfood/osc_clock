@@ -7,15 +7,22 @@ use crate::config::{ CONFIG };
 use std::thread;
 use crate::message::{ build, BuilderParams };
 
-pub async fn sender() {
+pub async fn sender<F, Fut>(s: F)
+    where F: Fn(OscMessage) -> Fut, Fut: std::future::Future<Output = ()>
+{
     let mut config = CONFIG.lock().unwrap().clone();
 
-    print_flush(
-        print_log(
-            t!("sending_to_N", address = format!("{}:{}", config.sender_ip, config.sender_port)),
-            LogType::INFO
-        )
-    );
+    if !config.use_osc_query {
+        print_flush(
+            print_log(
+                t!(
+                    "sending_to_N",
+                    address = format!("{}:{}", config.sender_ip, config.sender_port)
+                ),
+                LogType::INFO
+            )
+        );
+    }
 
     let mut dt = Local::now();
 
@@ -72,7 +79,7 @@ pub async fn sender() {
             sync_toggle,
         });
         for message in messages {
-            send(message, &config.sender_ip, config.sender_port);
+            s(message).await;
         }
         current_second = dt.second();
     }
