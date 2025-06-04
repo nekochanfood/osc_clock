@@ -5,34 +5,26 @@ extern crate rust_i18n;
 i18n!("locales");
 
 mod config;
-use config::{ init_config, CONFIG };
-
-mod log;
-
-mod recovery;
-
-mod sender;
-mod receiver;
-
-mod message;
 mod legacy;
-
-use vrchat_osc::{ Error };
-
+mod log;
+mod message;
 mod osc_query;
+mod receiver;
+mod recovery;
+mod sender;
 
 static VERSION: f32 = 1.1;
 
 #[tokio::main]
-async fn main() -> Result<(), Error> {
+async fn main() -> Result<(), vrchat_osc::Error> {
     // Title
     print!("OSC Clock v{0:.1}\n", VERSION);
     print!("{}\n\n", t!("press_ctrl+c_to_exit"));
 
     // Load configuration
-    init_config();
+    config::init_config();
 
-    if CONFIG.lock().unwrap().use_osc_query {
+    if config::CONFIG.lock().unwrap().use_osc_query {
         osc_query::start().await?;
     } else {
         legacy::start().await;
