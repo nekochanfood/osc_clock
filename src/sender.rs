@@ -48,16 +48,19 @@ pub async fn sender<F, Fut>(s: F)
         let mut flag = SyncFlag::MINUTE | SyncFlag::HOUR | SyncFlag::DAY;
 
         if !config.send_all_value_every_time {
-            if dt.minute() != current_minute {
+            if dt.minute() == current_minute {
                 flag &= !SyncFlag::MINUTE;
+            } else {
                 current_minute = dt.minute();
             }
-            if dt.hour() != current_hour {
+            if dt.hour() == current_hour {
                 flag &= !SyncFlag::HOUR;
+            } else {
                 current_hour = dt.hour();
             }
-            if dt.day() != current_day {
+            if dt.day() == current_day {
                 flag &= !SyncFlag::DAY;
+            } else {
                 current_day = dt.day();
             }
         }
