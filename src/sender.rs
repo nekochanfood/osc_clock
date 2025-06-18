@@ -45,23 +45,45 @@ pub async fn sender<F, Fut>(s: F)
             dt = Local::now();
         }
 
-        let mut flag = SyncFlag::MINUTE | SyncFlag::HOUR | SyncFlag::DAY;
+        let send_minute: bool;
+        let send_hour: bool;
+        let send_day: bool;
 
-        if !config.send_all_value_every_time {
+        if config.send_all_value_every_time {
+            send_minute = true;
+            send_hour = true;
+            send_day = true;
+        } else {
             if dt.minute() != current_minute {
-            flag &= !SyncFlag::MINUTE;
-            current_minute = dt.minute();
+                send_minute = true;
+                current_minute = dt.minute();
+            } else {
+                send_minute = false;
             }
             if dt.hour() != current_hour {
-            flag &= !SyncFlag::HOUR;
-            current_hour = dt.hour();
+                send_hour = true;
+                current_hour = dt.hour();
+            } else {
+                send_hour = false;
             }
             if dt.day() != current_day {
-            flag &= !SyncFlag::DAY;
-            current_day = dt.day();
+                send_day = true;
+                current_day = dt.day();
+            } else {
+                send_day = false;
             }
         }
 
+        let mut flag = SyncFlag::empty();
+        if !send_minute {
+            flag |= SyncFlag::MINUTE;
+        }
+        if !send_hour {
+            flag |= SyncFlag::HOUR;
+        }
+        if !send_day {
+            flag |= SyncFlag::DAY;
+        }
         let messages = build(BuilderParams {
             orders: ORDERS.clone(),
             sync_flag: flag,
