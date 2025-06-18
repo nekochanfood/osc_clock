@@ -4,7 +4,8 @@ use std::net::{ UdpSocket, SocketAddr };
 
 use crate::config::{ Config, CONFIG };
 use crate::log::{ print_log, print_flush, LogType };
-use crate::message::{ build, BuilderParams };
+use crate::message::{ build, BuilderParams, SyncFlag };
+use crate::order::ORDERS;
 use crate::sender::send;
 
 pub async fn receiver() {
@@ -34,10 +35,10 @@ pub async fn receiver() {
                     (_, OscPacket::Message(msg)) => {
                         config = CONFIG.lock().unwrap().clone();
                         if check(msg.clone(), config.clone()) {
-                            let sync_toggle = vec![true, true, true];
+                            let flag = SyncFlag::MINUTE | SyncFlag::HOUR | SyncFlag::DAY;
                             let messages = build(BuilderParams {
-                                addresses: config.addresses.to_vec(),
-                                sync_toggle,
+                                orders: ORDERS.clone(),
+                                sync_flag: flag,
                             });
                             for message in messages {
                                 send(message, &config.sender_ip, config.sender_port);

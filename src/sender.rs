@@ -4,8 +4,9 @@ use std::net::{ UdpSocket, SocketAddr };
 
 use crate::log::{ print_log, print_flush, LogType };
 use crate::config::{ CONFIG };
+use crate::order::ORDERS;
 use std::thread;
-use crate::message::{ build, BuilderParams };
+use crate::message::{ build, BuilderParams, SyncFlag };
 
 pub async fn sender<F, Fut>(s: F)
     where F: Fn(OscMessage) -> Fut, Fut: std::future::Future<Output = ()>
@@ -73,10 +74,19 @@ pub async fn sender<F, Fut>(s: F)
             }
         }
 
-        let sync_toggle = vec![send_minute, send_hour, send_day];
+        let mut flag = SyncFlag::empty();
+        if !send_minute {
+            flag |= SyncFlag::MINUTE;
+        }
+        if !send_hour {
+            flag |= SyncFlag::HOUR;
+        }
+        if !send_day {
+            flag |= SyncFlag::DAY;
+        }
         let messages = build(BuilderParams {
-            addresses: config.addresses.to_vec(),
-            sync_toggle,
+            orders: ORDERS.clone(),
+            sync_flag: flag,
         });
         for message in messages {
             s(message).await;

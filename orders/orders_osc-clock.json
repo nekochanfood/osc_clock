@@ -1,0 +1,70 @@
+[
+    {
+      "type": "second_float",
+      "address": "/avatar/parameters/osc_clock@second_f"
+    },
+    {
+      "type": "second_int",
+      "address": "/avatar/parameters/osc_clock@second_i"
+    },
+    {
+      "type": "minute_float_mixed",
+      "address": "/avatar/parameters/osc_clock@minute_f"
+    },
+    {
+      "type": "minute_int",
+      "address": "/avatar/parameters/osc_clock@minute_i"
+    },
+    {
+      "type": "hour24_float_mixed",
+      "address": "/avatar/parameters/osc_clock@hour24_f"
+    },
+    {
+      "type": "hour24_int",
+      "address": "/avatar/parameters/osc_clock@hour24_i"
+    },
+    {
+      "type": "hour12_float_mixed",
+      "address": "/avatar/parameters/osc_clock@hour12_f"
+    },
+    {
+      "type": "hour12_int",
+      "address": "/avatar/parameters/osc_clock@hour12_i"
+    },
+    {
+      "type": "is_pm",
+      "address": "/avatar/parameters/osc_clock@hour_isPM"
+    },
+    {
+      "type": "day_int",
+      "address": "/avatar/parameters/osc_clock@day"
+    },
+    {
+      "type": "day_of_week_int",
+      "address": "/avatar/parameters/osc_clock@dofw"
+    },
+    {
+      "type": "month_int",
+      "address": "/avatar/parameters/osc_clock@month"
+    },
+    {
+      "type": "year",
+      "address": "/avatar/parameters/osc_clock@year"
+    },
+    {
+      "type": "year_0",
+      "address": "/avatar/parameters/osc_clock@year_0"
+    },
+    {
+      "type": "year_1",
+      "address": "/avatar/parameters/osc_clock@year_1"
+    },
+    {
+      "type": "year_2",
+      "address": "/avatar/parameters/osc_clock@year_2"
+    },
+    {
+      "type": "year_3",
+      "address": "/avatar/parameters/osc_clock@year_3"
+    }
+  ]

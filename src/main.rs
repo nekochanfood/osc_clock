@@ -12,6 +12,8 @@ mod osc_query;
 mod receiver;
 mod recovery;
 mod sender;
+mod order;
+mod unit;
 
 static VERSION: f32 = 1.1;
 
@@ -23,6 +25,8 @@ async fn main() -> Result<(), vrchat_osc::Error> {
 
     // Load configuration
     config::init_config();
+
+    order::init_orders();
 
     if config::CONFIG.lock().unwrap().use_osc_query {
         osc_query::start().await?;

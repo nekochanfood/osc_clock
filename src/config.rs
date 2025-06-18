@@ -21,7 +21,6 @@ pub struct Config {
     pub send_all_value_every_time: bool,
     pub check_rate_ms: u64,
     pub restrict_send_rate: bool,
-    pub addresses: Vec<String>,
     pub update_handle_addresses: Vec<String>,
 }
 
@@ -38,25 +37,6 @@ impl Default for Config {
             send_all_value_every_time: false,
             check_rate_ms: 1,
             restrict_send_rate: true,
-            addresses: vec![
-                "/avatar/parameters/osc_clock@second_f".to_string(),
-                "/avatar/parameters/osc_clock@second_i".to_string(),
-                "/avatar/parameters/osc_clock@minute_f".to_string(),
-                "/avatar/parameters/osc_clock@minute_i".to_string(),
-                "/avatar/parameters/osc_clock@hour24_f".to_string(),
-                "/avatar/parameters/osc_clock@hour24_i".to_string(),
-                "/avatar/parameters/osc_clock@hour12_f".to_string(),
-                "/avatar/parameters/osc_clock@hour12_i".to_string(),
-                "/avatar/parameters/osc_clock@hour_isPM".to_string(),
-                "/avatar/parameters/osc_clock@day".to_string(),
-                "/avatar/parameters/osc_clock@dofw".to_string(),
-                "/avatar/parameters/osc_clock@month".to_string(),
-                "/avatar/parameters/osc_clock@year".to_string(),
-                "/avatar/parameters/osc_clock@year_0".to_string(),
-                "/avatar/parameters/osc_clock@year_1".to_string(),
-                "/avatar/parameters/osc_clock@year_2".to_string(),
-                "/avatar/parameters/osc_clock@year_3".to_string()
-            ],
             update_handle_addresses: vec!["/avatar/parameters/osc_clock@ForceSync".to_string()],
         }
     }
@@ -135,23 +115,3 @@ fn load_config() -> Config {
 
     return config;
 }
-
-// pub fn set_sender_ip(ip: &str) {
-//     let mut cfg = CONFIG.lock().unwrap();
-//     cfg.sender_ip = ip.to_string();
-// }
-
-// pub fn set_receiver_ip(ip: &str) {
-//     let mut cfg = CONFIG.lock().unwrap();
-//     cfg.receiver_ip = ip.to_string();
-// }
-
-// pub fn set_sender_port(port: u16) {
-//     let mut cfg = CONFIG.lock().unwrap();
-//     cfg.sender_port = port;
-// }
-
-// pub fn set_receiver_port(port: u16) {
-//     let mut cfg = CONFIG.lock().unwrap();
-//     cfg.receiver_port = port;
-// }

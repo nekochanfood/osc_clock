@@ -4,9 +4,11 @@ use rosc::{ OscMessage, OscPacket };
 
 use crate::log::{ print_log, print_flush, LogType };
 use crate::config::{ CONFIG };
-use crate::sender::sender;
-
-use crate::{ message, receiver::check, sender::{ send } };
+use crate::message::SyncFlag;
+use crate::order::ORDERS;
+use crate::receiver::check;
+use crate::sender::{sender, send};
+use crate::message::{ build, BuilderParams};
 
 pub async fn start() -> Result<(), Error> {
     let vrchat_osc = VRChatOSC::new().await?;
@@ -38,10 +40,10 @@ pub async fn start() -> Result<(), Error> {
         if let OscPacket::Message(msg) = packet {
             let config = CONFIG.lock().unwrap().clone();
             if check(msg.clone(), config.clone()) {
-                let sync_toggle = vec![true, true, true];
-                let messages = message::build(message::BuilderParams {
-                    addresses: config.addresses.to_vec(),
-                    sync_toggle,
+                let flag = SyncFlag::MINUTE | SyncFlag::HOUR | SyncFlag::DAY;
+                let messages = build(BuilderParams {
+                    orders: ORDERS.clone(),
+                    sync_flag: flag,
                 });
                 for message in messages {
                     send(message, &config.sender_ip, config.sender_port);
