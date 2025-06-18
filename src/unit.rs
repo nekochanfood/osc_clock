@@ -108,9 +108,9 @@ pub fn handle_unit(
     );
 
     if
-        (sync_flag.contains(SyncFlag::MINUTE) && is_minute_unit) ||
-        (sync_flag.contains(SyncFlag::HOUR) && is_hour_unit) ||
-        (sync_flag.contains(SyncFlag::DAY) && is_day_unit)
+        ((!sync_flag.contains(SyncFlag::MINUTE)) && is_minute_unit) ||
+        ((!sync_flag.contains(SyncFlag::HOUR)) && is_hour_unit) ||
+        (!(sync_flag.contains(SyncFlag::DAY)) && is_day_unit)
     {
         return OscType::Nil;
     }
