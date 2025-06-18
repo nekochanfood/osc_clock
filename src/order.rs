@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
 use serde_json;
-use crate::log::print_flush;
 use crate::unit::UnitType;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
