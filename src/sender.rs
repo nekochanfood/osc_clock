@@ -40,50 +40,28 @@ pub async fn sender<F, Fut>(s: F)
     loop {
         config = CONFIG.lock().unwrap().clone();
 
-        let send_minute: bool;
-        let send_hour: bool;
-        let send_day: bool;
-
         while config.restrict_send_rate && dt.second() == current_second {
             thread::sleep(std::time::Duration::from_millis(config.check_rate_ms));
             dt = Local::now();
         }
 
-        if config.send_all_value_every_time {
-            send_minute = true;
-            send_hour = true;
-            send_day = true;
-        } else {
+        let mut flag = SyncFlag::MINUTE | SyncFlag::HOUR | SyncFlag::DAY;
+
+        if !config.send_all_value_every_time {
             if dt.minute() != current_minute {
-                send_minute = true;
-                current_minute = dt.minute();
-            } else {
-                send_minute = false;
+            flag &= !SyncFlag::MINUTE;
+            current_minute = dt.minute();
             }
             if dt.hour() != current_hour {
-                send_hour = true;
-                current_hour = dt.hour();
-            } else {
-                send_hour = false;
+            flag &= !SyncFlag::HOUR;
+            current_hour = dt.hour();
             }
             if dt.day() != current_day {
-                send_day = true;
-                current_day = dt.day();
-            } else {
-                send_day = false;
+            flag &= !SyncFlag::DAY;
+            current_day = dt.day();
             }
         }
 
-        let mut flag = SyncFlag::empty();
-        if !send_minute {
-            flag |= SyncFlag::MINUTE;
-        }
-        if !send_hour {
-            flag |= SyncFlag::HOUR;
-        }
-        if !send_day {
-            flag |= SyncFlag::DAY;
-        }
         let messages = build(BuilderParams {
             orders: ORDERS.clone(),
             sync_flag: flag,
