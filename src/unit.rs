@@ -114,7 +114,6 @@ pub fn handle_unit(
     {
         return OscType::Nil;
     }
-    println!("unit_type: {:?}", unit_type);
     match unit_type {
         UnitType::SecondInt => {
             return OscType::Int(dt.second() as i32);
