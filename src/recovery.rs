@@ -7,7 +7,7 @@ pub fn check_repair() {
     let args: Vec<String> = env::args().collect();
     if args.len() == 2 {
         if args[1] == "repair" {
-            match repair_config_json() {
+            match repair_config_json(false) {
                 Ok(_) => {
                     print_flush(print_log(t!("repair_success").to_string(), LogType::INFO));
                 }
