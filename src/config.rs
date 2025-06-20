@@ -94,7 +94,7 @@ pub fn read_config_json(json_path: &str, complement: bool) -> Result<Config, io:
     let mut default_value = serde_json::to_value(&config)?;
 
     if let Err(_) = file.read_to_string(&mut json) {
-        judge = ConfigStatus::Lacked;
+        judge = ConfigStatus::Failed;
     } else {
         let partial: serde_json::Value = serde_json::from_str(&json)?;
         if check_itgr(&partial, &default_value, &["config_status"]) {
@@ -139,7 +139,6 @@ fn check_itgr(
                 count += 1;
             }
         }
-        
     }
     return count == 0;
 }
@@ -147,21 +146,31 @@ fn check_itgr(
 pub fn repair_config_json(force: bool) -> Result<bool, io::Error> {
     let mut file: File;
     let path = std::path::Path::new("./config.json");
-    if path.is_file()  && !force {
+    if path.is_file() && !force {
         match read_config_json(path.to_str().unwrap(), true) {
             Ok(result) => {
                 rust_i18n::set_locale(&result.language);
             }
             Err(_error) => {
-                return repair_config_json(true)
+                return repair_config_json(true);
             }
         }
     } else {
+        let mut config = Config::default();
         if path.exists() {
+            match read_config_json(path.to_str().unwrap(), true) {
+                Ok(result) => {
+                    config = result;
+                    print_flush(print_log(format!("Config file found"), LogType::INFO));
+                }
+                Err(_error) => {
+                    print_flush(print_log(format!("Failed to load config file"), LogType::WARN));
+                }
+            }
             fs::remove_file(path)?;
         }
         file = File::create("./config.json")?;
-        let json = serde_json::to_string_pretty(&get_fallback_config())?;
+        let json = serde_json::to_string_pretty(&config)?;
 
         file.write_all(json.as_bytes()).expect(
             &print_log("Failed to write to file".to_string(), LogType::ERROR)
@@ -179,11 +188,17 @@ fn load_config() -> Config {
             config = result;
             rust_i18n::set_locale(&config.language);
             if config.config_status == format!("{:?}", ConfigStatus::Lacked) {
-                print_flush(print_log(format!("Deprecated or lacked properties config has been detected. Use \"osc_clock.exe --repair\" to fix the config file."), LogType::WARN));
+                print_flush(
+                    print_log(
+                        format!(
+                            "Deprecated or lacked properties config has been detected. Use \"osc_clock.exe --repair\" to fix the config file."
+                        ),
+                        LogType::WARN
+                    )
+                );
             }
         }
         Err(_error) => {
-            print_flush(format!("{:?}\n\n\n", _error));
             print_flush(print_log(t!("failed_to_load_config").to_string(), LogType::WARN));
             print_flush(print_log(t!("how_to_repair_config").to_string(), LogType::INFO));
             config = get_fallback_config();
