@@ -7,7 +7,6 @@ use std::io::{ self, Read, Write };
 use std::sync::Mutex;
 use once_cell::sync::Lazy;
 use crate::log::{ print_log, LogType };
-use crate::recovery::check_repair;
 use crate::log::print_flush;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -182,7 +181,6 @@ pub fn repair_config_json(force: bool) -> Result<bool, io::Error> {
 
 fn load_config() -> Config {
     let config;
-    check_repair();
     match read_config_json("./config.json", true) {
         Ok(result) => {
             config = result;
