@@ -1,13 +1,13 @@
-use std::fmt::Debug;
-use serde::{ Serialize, Deserialize };
-use serde_json::Value;
-use std::fs::File;
-use std::{ fs };
-use std::io::{ self, ErrorKind, Read, Write };
-use std::sync::Mutex;
-use once_cell::sync::Lazy;
-use crate::log::{ print_log, LogType };
 use crate::log::print_flush;
+use crate::log::{print_log, LogType};
+use once_cell::sync::Lazy;
+use serde::{Deserialize, Serialize};
+use serde_json::Value;
+use std::fmt::Debug;
+use std::fs::File;
+use std::io::{self, ErrorKind, Read, Write};
+use std::sync::Mutex;
+use std::{fs, vec};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Config {
@@ -21,7 +21,6 @@ pub struct Config {
     pub send_all_value_every_time: bool,
     pub check_rate_ms: u64,
     pub restrict_send_rate: bool,
-    pub update_handle_addresses: Vec<String>,
     pub config_status: String,
 }
 
@@ -52,13 +51,12 @@ impl Default for Config {
             send_all_value_every_time: false,
             check_rate_ms: 1,
             restrict_send_rate: true,
-            update_handle_addresses: vec!["/avatar/parameters/osc_clock@ForceSync".to_string()],
             config_status: format!("{:?}", ConfigStatus::Fallback),
         }
     }
 }
 
-pub static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| { Mutex::new(load_config()) });
+pub static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| Mutex::new(load_config()));
 
 pub fn init_config() {
     Lazy::force(&CONFIG);
@@ -129,7 +127,7 @@ pub fn read_config_json(json_path: &str, complement: bool) -> Result<Config, io:
 fn check_itgr(
     partial: &serde_json::Value,
     default: &serde_json::Value,
-    exceptions: &[&str]
+    exceptions: &[&str],
 ) -> bool {
     let mut count = 0;
     if let (Value::Object(partial_map), Value::Object(default_map)) = (partial, default) {
@@ -138,7 +136,10 @@ fn check_itgr(
                 continue;
             }
             if !partial_map.contains_key(k) {
-                print_flush(print_log(format!("Lacked property found: {}", k), LogType::WARN));
+                print_flush(print_log(
+                    format!("Lacked property found: {}", k),
+                    LogType::WARN,
+                ));
                 count += 1;
             }
         }
@@ -167,20 +168,35 @@ pub fn repair_config_json(force: bool) -> Result<bool, io::Error> {
                     print_flush(print_log(format!("Config file found"), LogType::INFO));
                 }
                 Err(_error) => {
-                    print_flush(print_log(format!("Failed to load config file"), LogType::WARN));
+                    print_flush(print_log(
+                        format!("Failed to load config file"),
+                        LogType::WARN,
+                    ));
                 }
             }
             fs::remove_file(path)?;
         }
         file = File::create("./config.json")?;
-        let json = serde_json::to_string_pretty(&config)?;
+        let json =
+            serde_json::to_string_pretty(&validate(config, vec!["config_status".to_string()]))?;
 
-        file.write_all(json.as_bytes()).expect(
-            &print_log("Failed to write to file".to_string(), LogType::ERROR)
-        );
+        file.write_all(json.as_bytes()).expect(&print_log(
+            "Failed to write to file".to_string(),
+            LogType::ERROR,
+        ));
     }
 
     Ok(true)
+}
+
+fn validate(config: Config, exclusions: Vec<String>) -> serde_json::Value {
+    let mut value = serde_json::to_value(config).unwrap();
+    if let serde_json::Value::Object(ref mut map) = value {
+        for key in exclusions {
+            map.remove(&key);
+        }
+    }
+    value
 }
 
 fn load_config() -> Config {
@@ -216,12 +232,21 @@ fn load_config() -> Config {
                         print_flush(print_log("Config file created".to_string(), LogType::INFO));
                     } else {
                         config = get_fallback_config();
-                        print_flush(print_log("Using fallback config".to_string(), LogType::WARN));
+                        print_flush(print_log(
+                            "Using fallback config".to_string(),
+                            LogType::WARN,
+                        ));
                     }
                 }
                 _ => {
-                    print_flush(print_log(t!("failed_to_load_config").to_string(), LogType::WARN));
-                    print_flush(print_log(t!("how_to_repair_config").to_string(), LogType::INFO));
+                    print_flush(print_log(
+                        t!("failed_to_load_config").to_string(),
+                        LogType::WARN,
+                    ));
+                    print_flush(print_log(
+                        t!("how_to_repair_config").to_string(),
+                        LogType::INFO,
+                    ));
                     config = get_fallback_config();
                 }
             }
@@ -229,21 +254,36 @@ fn load_config() -> Config {
     }
 
     if config.send_all_value_every_time {
-        print_flush(print_log(t!("warning_send_all_value").to_string(), LogType::WARN));
+        print_flush(print_log(
+            t!("warning_send_all_value").to_string(),
+            LogType::WARN,
+        ));
     }
 
     if !config.restrict_send_rate {
-        print_flush(print_log(t!("warning_restrict_send_rate").to_string(), LogType::WARN));
+        print_flush(print_log(
+            t!("warning_restrict_send_rate").to_string(),
+            LogType::WARN,
+        ));
     }
 
     if config.check_rate_ms == 0 {
-        print_flush(print_log(t!("warning_check_rate_ms_zero").to_string(), LogType::WARN));
+        print_flush(print_log(
+            t!("warning_check_rate_ms_zero").to_string(),
+            LogType::WARN,
+        ));
     } else if config.check_rate_ms > 100 {
-        print_flush(print_log(t!("warning_check_rate_ms_too_much").to_string(), LogType::WARN));
+        print_flush(print_log(
+            t!("warning_check_rate_ms_too_much").to_string(),
+            LogType::WARN,
+        ));
     }
 
     if config.use_osc_query {
-        print_flush(print_log(t!("warning_osc_query_enabled").to_string(), LogType::INFO));
+        print_flush(print_log(
+            t!("warning_osc_query_enabled").to_string(),
+            LogType::INFO,
+        ));
     }
 
     return config;

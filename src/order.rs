@@ -1,11 +1,11 @@
-use once_cell::sync::Lazy;
-use serde::{ Deserialize, Serialize };
-use std::io::Write;
-use std::{fs, io};
-use std::path::Path;
-use serde_json;
 use crate::log::{print_flush, print_log, LogType};
 use crate::unit::UnitType;
+use once_cell::sync::Lazy;
+use serde::{Deserialize, Serialize};
+use serde_json;
+use std::io::Write;
+use std::path::Path;
+use std::{fs, io};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Order {
@@ -13,20 +13,26 @@ pub struct Order {
     pub address: String,
 }
 
-pub static ORDERS: Lazy<Vec<Order>> = Lazy::new(|| load_orders());
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Orders {
+    pub sender: Vec<Order>,
+    pub handler: Vec<Order>,
+}
+
+pub static ORDERS: Lazy<Orders> = Lazy::new(|| load_orders());
 
 pub fn init_orders() {
     Lazy::force(&ORDERS);
 }
 
-pub fn load_orders() -> Vec<Order> {
+pub fn load_orders() -> Orders {
     let mut orders = Vec::new();
     let orders_dir = Path::new("orders");
 
     if !orders_dir.exists() {
         if let Err(e) = fs::create_dir_all(orders_dir) {
             eprintln!("Failed to create orders directory: {}", e);
-            return orders;
+            return split(get_fallback_orders());
         }
     }
 
@@ -62,13 +68,34 @@ pub fn load_orders() -> Vec<Order> {
                 let _ = fs::write(&default_path, json);
             }
             print_flush(print_log("Orders file created".to_string(), LogType::INFO));
-            orders = load_orders();
+            return load_orders();
         } else {
             orders = get_fallback_orders();
-            print_flush(print_log("Using fallback orders".to_string(), LogType::WARN));
+            print_flush(print_log(
+                "Using fallback orders".to_string(),
+                LogType::WARN,
+            ));
         }
     }
-    orders
+    split(orders)
+}
+
+fn split(orders: Vec<Order>) -> Orders {
+    let mut sender = Vec::new();
+    let mut handler = Vec::new();
+
+    for order in orders {
+        if order.r#type == UnitType::UpdateHandler {
+            handler.push(order);
+        } else {
+            sender.push(order);
+        }
+    }
+
+    Orders {
+        sender,
+        handler,
+    }
 }
 
 pub fn get_fallback_orders() -> Vec<Order> {
@@ -109,7 +136,10 @@ pub fn get_fallback_orders() -> Vec<Order> {
             r#type: UnitType::IsPm,
             address: "/avatar/parameters/osc_clock@hour_isPM".to_string(),
         },
-        Order { r#type: UnitType::DayInt, address: "/avatar/parameters/osc_clock@day".to_string() },
+        Order {
+            r#type: UnitType::DayInt,
+            address: "/avatar/parameters/osc_clock@day".to_string(),
+        },
         Order {
             r#type: UnitType::DayOfWeekInt,
             address: "/avatar/parameters/osc_clock@dofw".to_string(),
@@ -118,7 +148,10 @@ pub fn get_fallback_orders() -> Vec<Order> {
             r#type: UnitType::MonthInt,
             address: "/avatar/parameters/osc_clock@month".to_string(),
         },
-        Order { r#type: UnitType::Year, address: "/avatar/parameters/osc_clock@year".to_string() },
+        Order {
+            r#type: UnitType::Year,
+            address: "/avatar/parameters/osc_clock@year".to_string(),
+        },
         Order {
             r#type: UnitType::Year0,
             address: "/avatar/parameters/osc_clock@year_0".to_string(),
@@ -134,6 +167,10 @@ pub fn get_fallback_orders() -> Vec<Order> {
         Order {
             r#type: UnitType::Year3,
             address: "/avatar/parameters/osc_clock@year_3".to_string(),
-        }
+        },
+        Order {
+            r#type: UnitType::UpdateHandler,
+            address: "/avatar/parameters/osc_clock@ForceSync".to_string(),
+        },
     ]
 }

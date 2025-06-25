@@ -66,5 +66,9 @@
     {
       "type": "year_3",
       "address": "/avatar/parameters/osc_clock@year_3"
+    },
+    {
+      "type": "update_handler",
+      "address": "/avatar/parameters/osc_clock@ForceSync"
     }
   ]

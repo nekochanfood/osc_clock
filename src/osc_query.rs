@@ -39,10 +39,10 @@ pub async fn start() -> Result<(), Error> {
     vrchat_osc.register(&service_name, root_node, |packet| {
         if let OscPacket::Message(msg) = packet {
             let config = CONFIG.lock().unwrap().clone();
-            if check(msg.clone(), config.clone()) {
+            if check(msg.clone(), ORDERS.clone().handler) {
                 let flag = SyncFlag::MINUTE | SyncFlag::HOUR | SyncFlag::DAY;
                 let messages = build(BuilderParams {
-                    orders: ORDERS.clone(),
+                    orders: ORDERS.clone().sender,
                     sync_flag: flag,
                 });
                 for message in messages {

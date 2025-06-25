@@ -65,7 +65,7 @@ pub async fn sender<F, Fut>(s: F)
             }
         }
         let messages = build(BuilderParams {
-            orders: ORDERS.clone(),
+            orders: ORDERS.clone().sender,
             sync_flag: flag,
         });
         for message in messages {

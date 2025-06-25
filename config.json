@@ -1,16 +1,12 @@
 {
+  "check_rate_ms": 1,
   "language": "en",
-  "use_osc_query": true,
-  "sender_ip": "127.0.0.1",
-  "sender_port": 9000,
   "receiver_ip": "127.0.0.1",
   "receiver_port": 9001,
-  "show_debug_log": false,
-  "send_all_value_every_time": false,
-  "check_rate_ms": 1,
   "restrict_send_rate": true,
-  "update_handle_addresses": [
-    "/avatar/parameters/osc_clock@ForceSync"
-  ],
-  "config_status": "Fallback"
+  "send_all_value_every_time": false,
+  "sender_ip": "127.0.0.1",
+  "sender_port": 9000,
+  "show_debug_log": false,
+  "use_osc_query": false
 }

@@ -2,10 +2,10 @@ use chrono::Local;
 use rosc::{ OscMessage, OscPacket, OscType };
 use std::net::{ UdpSocket, SocketAddr };
 
-use crate::config::{ Config, CONFIG };
+use crate::config::{ CONFIG };
 use crate::log::{ print_log, print_flush, LogType };
 use crate::message::{ build, BuilderParams, SyncFlag };
-use crate::order::ORDERS;
+use crate::order::{Order, ORDERS};
 use crate::sender::send;
 
 pub async fn receiver() {
@@ -34,10 +34,10 @@ pub async fn receiver() {
                 match packet {
                     (_, OscPacket::Message(msg)) => {
                         config = CONFIG.lock().unwrap().clone();
-                        if check(msg.clone(), config.clone()) {
+                        if check(msg.clone(), ORDERS.clone().handler) {
                             let flag = SyncFlag::MINUTE | SyncFlag::HOUR | SyncFlag::DAY;
                             let messages = build(BuilderParams {
-                                orders: ORDERS.clone(),
+                                orders: ORDERS.clone().sender,
                                 sync_flag: flag,
                             });
                             for message in messages {
@@ -67,7 +67,7 @@ pub async fn receiver() {
     }
 }
 
-pub fn check(msg: OscMessage, config: Config) -> bool {
+pub fn check(msg: OscMessage, order: Vec<Order>) -> bool {
     let update: bool;
 
     match msg.args[0] {
@@ -83,8 +83,8 @@ pub fn check(msg: OscMessage, config: Config) -> bool {
         }
     }
     if update {
-        for n in 0..config.update_handle_addresses.len() {
-            if msg.addr.to_string() == config.update_handle_addresses[n].to_string() {
+        for n in 0..order.len() {
+            if msg.addr.to_string() == order[n].address.to_string() {
                 print_flush(
                     print_log(
                         t!(

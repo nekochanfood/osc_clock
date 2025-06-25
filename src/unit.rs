@@ -67,6 +67,9 @@ pub enum UnitType {
     Year2,
     #[serde(rename = "year_3")]
     Year3,
+
+    #[serde(rename = "update_handler")]
+    UpdateHandler
 }
 
 pub fn handle_unit(
@@ -260,5 +263,6 @@ pub fn handle_unit(
                 year_str.chars().nth(index).unwrap_or('0').to_digit(10).unwrap_or(0) as i32
             );
         }
+        UnitType::UpdateHandler => return OscType::Nil,
     }
 }
