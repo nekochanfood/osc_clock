@@ -76,30 +76,25 @@ pub fn handle_unit(
 ) -> OscType {
     let is_minute_unit = matches!(
         unit_type,
-        UnitType::MinuteInt | UnitType::MinuteFloat | UnitType::MinuteFloatMixed
+        UnitType::MinuteInt | UnitType::MinuteFloat
     );
     let is_hour_unit = matches!(
         unit_type,
         UnitType::Hour24Int |
             UnitType::Hour24Float |
-            UnitType::Hour24FloatMixed |
             UnitType::Hour12Int |
             UnitType::Hour12Float |
-            UnitType::Hour12FloatMixed |
             UnitType::IsPm
     );
     let is_day_unit = matches!(
         unit_type,
         UnitType::DayInt |
             UnitType::DayFloat |
-            UnitType::DayFloatMixed |
             UnitType::DayOfWeekInt |
             UnitType::DayOfWeekFloat |
-            UnitType::DayOfWeekFloatMixed |
             UnitType::IsPm |
             UnitType::MonthInt |
             UnitType::MonthFloat |
-            UnitType::MonthFloatMixed |
             UnitType::Year |
             UnitType::Year0 |
             UnitType::Year1 |
