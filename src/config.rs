@@ -205,7 +205,6 @@ fn load_config() -> Config {
             match _error.kind() {
                 ErrorKind::NotFound => {
                     print!("Config file not found. Do you want to create a config file? (Y/n): ");
-                    // Prompt user for input
                     let mut input = String::new();
                     io::stdout().flush().ok();
                     io::stdin().read_line(&mut input).ok();
@@ -219,7 +218,6 @@ fn load_config() -> Config {
                         config = get_fallback_config();
                         print_flush(print_log("Using fallback config".to_string(), LogType::WARN));
                     }
-                    
                 }
                 _ => {
                     print_flush(print_log(t!("failed_to_load_config").to_string(), LogType::WARN));
