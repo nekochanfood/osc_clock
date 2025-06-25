@@ -6,7 +6,7 @@
   "failed_to_read_line": "行の読み取りに失敗しました",
   "press_ctrl+c_to_exit": "Ctrl+C で終了",
   "failed_to_load_config": "config.json の読み込みに失敗しました。代わりにデフォルトの設定を使用します。",
-  "how_to_repair_config": "`\\osc_clock.exe repair` でconfig.jsonを初期状態に戻します。",
+  "how_to_repair_config": "`.\\osc_clock.exe --repair` でconfig.jsonを初期状態に戻します。",
   "listening_to_N": "%{address} からのパケットを受信します",
   "sending_to_N": "%{address} へ送信します",
   "failed_to_receive_data": "データの受信に失敗しました",

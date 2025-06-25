@@ -3,7 +3,7 @@ use serde::{ Serialize, Deserialize };
 use serde_json::Value;
 use std::fs::File;
 use std::{ fs };
-use std::io::{ self, Read, Write };
+use std::io::{ self, ErrorKind, Read, Write };
 use std::sync::Mutex;
 use once_cell::sync::Lazy;
 use crate::log::{ print_log, LogType };
@@ -35,6 +35,8 @@ pub enum ConfigStatus {
     Fallback,
     #[serde(rename = "Failed")]
     Failed,
+    #[serde(rename = "Missing")]
+    Missing,
 }
 
 impl Default for Config {
@@ -68,7 +70,6 @@ pub fn get_fallback_config() -> Config {
 }
 
 fn merge_json(a: &mut serde_json::Value, b: &serde_json::Value) {
-    use serde_json::Value;
     match (a, b) {
         (Value::Object(a_map), Value::Object(b_map)) => {
             for (k, v) in b_map {
@@ -92,8 +93,11 @@ pub fn read_config_json(json_path: &str, complement: bool) -> Result<Config, io:
     let mut config = Config::default();
     let mut default_value = serde_json::to_value(&config)?;
 
-    if let Err(_) = file.read_to_string(&mut json) {
-        judge = ConfigStatus::Failed;
+    if let Err(io_error) = file.read_to_string(&mut json) {
+        judge = match io_error.kind() {
+            ErrorKind::NotFound => ConfigStatus::Missing,
+            _ => ConfigStatus::Failed,
+        };
     } else {
         let partial: serde_json::Value = serde_json::from_str(&json)?;
         if check_itgr(&partial, &default_value, &["config_status"]) {
@@ -197,9 +201,32 @@ fn load_config() -> Config {
             }
         }
         Err(_error) => {
-            print_flush(print_log(t!("failed_to_load_config").to_string(), LogType::WARN));
-            print_flush(print_log(t!("how_to_repair_config").to_string(), LogType::INFO));
-            config = get_fallback_config();
+            // Handle error when loading config file
+            match _error.kind() {
+                ErrorKind::NotFound => {
+                    print!("Config file not found. Do you want to create a config file? (Y/n): ");
+                    // Prompt user for input
+                    let mut input = String::new();
+                    io::stdout().flush().ok();
+                    io::stdin().read_line(&mut input).ok();
+                    let input = input.trim().to_lowercase();
+                    println!();
+                    if input == "y" || input == "yes" || input == "Y" {
+                        let _ = repair_config_json(true);
+                        config = load_config();
+                        print_flush(print_log("Config file created".to_string(), LogType::INFO));
+                    } else {
+                        config = get_fallback_config();
+                        print_flush(print_log("Using fallback config".to_string(), LogType::WARN));
+                    }
+                    
+                }
+                _ => {
+                    print_flush(print_log(t!("failed_to_load_config").to_string(), LogType::WARN));
+                    print_flush(print_log(t!("how_to_repair_config").to_string(), LogType::INFO));
+                    config = get_fallback_config();
+                }
+            }
         }
     }
 

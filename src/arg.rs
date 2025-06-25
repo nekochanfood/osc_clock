@@ -11,7 +11,7 @@ pub fn check_args() {
                 .short('r')
                 .long("repair")
                 .help("Repair config file")
-                .action(clap::ArgAction::SetTrue) // フラグとして扱う
+                .action(clap::ArgAction::SetTrue)
         )
         .get_matches();
 

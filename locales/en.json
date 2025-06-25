@@ -6,7 +6,7 @@
     "failed_to_read_line": "Failed to read line",
     "press_ctrl+c_to_exit": "Ctrl+C to Exit",
     "failed_to_load_config": "Failed to load config.json. Use the default settings instead.",
-    "how_to_repair_config": "Run `\\osc_clock.exe repair` to return config.json to its initial state.",
+    "how_to_repair_config": "Run `.\\osc_clock.exe --repair` to return config.json to its initial state.",
     "listening_to_N": "Listening on %{address}",
     "sending_to_N": "Sending on %{address}",
     "failed_to_receive_data": "Failed to receive data",
