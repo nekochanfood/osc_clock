@@ -1,11 +1,21 @@
-# Tauri + SvelteKit + TypeScript
+# app
 
-This template should help get you started developing with Tauri, SvelteKit and TypeScript in Vite.
+OSC Clock desktop GUI application built with SvelteKit + Tauri.
 
-## Recommended IDE Setup
+## Build / Run
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+Prerequisites: Rust toolchain, Bun, and Tauri system prerequisites.
 
-## Note
+From this folder:
 
-Please use bun
+```bash
+bun install
+bun run tauri:dev
+```
+
+Build a release bundle:
+
+```bash
+bun install
+bun run tauri:build
+```

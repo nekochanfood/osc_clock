@@ -1,4 +1,4 @@
-use shared::{ log_message, LogType };
+use crate::{ log_message, LogType };
 use crate::config::{ repair_config_json };
 use std::io::{ self, Write };
 

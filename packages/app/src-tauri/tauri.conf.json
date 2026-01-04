@@ -6,7 +6,7 @@
     },
     "windows": [
       {
-        "height": 600,
+        "height": 800,
         "label": "main",
         "title": "OSC Clock",
         "width": 800

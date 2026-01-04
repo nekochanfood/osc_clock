@@ -16,6 +16,7 @@ name = "osc_clock"
 path = "src/bin/main.rs"
 
 [build-dependencies]
+build-utils = { path = "../build-utils" }
 
 [dependencies]
 vrchat_osc = { workspace = true }

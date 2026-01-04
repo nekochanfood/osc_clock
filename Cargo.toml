@@ -4,6 +4,7 @@ members = [
     "packages/core",
     "packages/shared",
     "packages/app/src-tauri",
+    "packages/build-utils",
     "scripts/icon-generator",
 ]
 resolver = "2"

@@ -1,0 +1,14 @@
+{
+  "name": "net.chanfoo.osc-clock.horloger.Editor",
+  "references": [
+    "net.chanfoo.osc-clock.horloger"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "autoReferenced": true,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "defineConstraints": [],
+  "optionalUnityReferences": []
+}

@@ -151,7 +151,6 @@
 
   .logs-container {
     flex: 1;
-    background-color: #0d0d0d;
     overflow-y: auto;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   }
@@ -163,7 +162,7 @@
   }
 
   .log-entry {
-    padding: 4px 0;
+    padding: 2px 0;
     border-bottom: 1px solid #2d2d2d;
     display: flex;
     gap: 10px;

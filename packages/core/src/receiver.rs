@@ -5,7 +5,7 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use crate::config::{ CONFIG };
-use shared::{ log_message, LogType };
+use crate::{ log_message, LogType };
 use crate::message::{ build, BuilderParams, SyncFlag };
 use crate::order::{Order, ORDERS};
 use crate::sender::send;

@@ -9,6 +9,7 @@ pub mod message;
 pub mod order;
 pub mod path;
 pub mod unit;
+pub mod log;
 
 pub mod legacy;
 pub mod osc_query;
@@ -20,7 +21,7 @@ pub mod recovery;
 pub use config::{Config, CONFIG};
 pub use order::{Order, Orders, ORDERS};
 
-pub use shared::{LogEntry, LogType, log_message, set_log_callback, clear_log_callback};
+pub use log::{LogEntry, LogType, log_message, set_log_callback, clear_log_callback};
 
 use tokio::task::JoinHandle;
 use std::sync::Arc;

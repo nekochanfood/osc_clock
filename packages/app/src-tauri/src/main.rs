@@ -9,8 +9,7 @@ use serde::Serialize;
 use tauri::Emitter;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use osc_clock::{OscClockService, Config};
-use shared::{LogEntry, LogType, log_message, set_log_callback};
+use osc_clock::{OscClockService, Config, LogEntry, LogType, log_message, set_log_callback};
 
 #[derive(Debug, Clone, Serialize)]
 struct LogMessage {

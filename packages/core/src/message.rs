@@ -3,7 +3,7 @@ use chrono::Local;
 use rosc::{ OscMessage, OscType };
 use serde::{Serialize, Deserialize};
 use crate::{ config::CONFIG, unit::handle_unit };
-use shared::{ log_message, LogType };
+use crate::{ log_message, LogType };
 use crate::order::{ Order};
 
 use bitflags::bitflags;

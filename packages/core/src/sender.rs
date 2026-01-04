@@ -2,7 +2,7 @@ use chrono::{ Local, Timelike, Datelike };
 use rosc::{ OscPacket, OscMessage };
 use std::net::{ UdpSocket, SocketAddr };
 
-use shared::{ log_message, LogType };
+use crate::{ log_message, LogType };
 use crate::config::{ CONFIG };
 use crate::order::ORDERS;
 use std::thread;

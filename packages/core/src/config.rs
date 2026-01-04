@@ -1,5 +1,5 @@
 // Removed: use shared::print_flush;
-use shared::{log_message, LogType};
+use crate::{log_message, LogType};
 use crate::path::get_exe_relative_path;
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};

@@ -4,7 +4,7 @@ use rosc::{ OscMessage, OscPacket };
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
-use shared::{ log_message, LogType };
+use crate::{ log_message, LogType };
 use crate::config::{ CONFIG };
 use crate::message::SyncFlag;
 use crate::order::ORDERS;

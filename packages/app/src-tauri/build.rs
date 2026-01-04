@@ -1,5 +1,4 @@
 use std::path::Path;
-use std::process::Command;
 use std::fs;
 
 fn main() {
@@ -8,7 +7,7 @@ fn main() {
     
     println!("cargo:rerun-if-changed=../../../assets/icons/icon.svg");
     
-    // Generate icons from icon.svg (only in src-tauri/icons/)
+    // Generate icons from icon.svg
     generate_icons();
     
     tauri_build::build()
@@ -85,7 +84,8 @@ fn sync_version() {
 }
 
 fn generate_icons() {
-    let icon_svg = Path::new("../../../assets/icons/icon.svg");
+    let workspace_root = build_utils::get_workspace_root();
+    let icon_svg = workspace_root.join("assets/icons/icon.svg");
     
     // Check if icon.svg exists
     if !icon_svg.exists() {
@@ -93,43 +93,34 @@ fn generate_icons() {
         return;
     }
     
-    // Always generate icons (overwrite existing ones)
-    println!("cargo:warning=Generating icons from icon.svg...");
+    // Always attempt to generate icons (overwrite existing ones)
+    let app_dir = workspace_root.join("packages/app");
+    let icons_dir = app_dir.join("src-tauri/icons");
+    let icon_ico = icons_dir.join("icon.ico");
     
-    // First try bun (if available)
-    let bun_output = Command::new("bun")
-        .args(&["run", "tauri", "icon", icon_svg.to_str().unwrap()])
-        .current_dir("..")
-        .output();
+    // Try to generate icons
+    let generated = build_utils::generate_icons_tauri(&app_dir, &icon_svg);
     
-    let success = match bun_output {
-        Ok(output) if output.status.success() => {
-            println!("cargo:warning=Icons generated successfully with bun");
-            true
+    if generated {
+        println!("cargo:warning=✅ Icons generated in src-tauri/icons/");
+    } else {
+        // Check if existing icons are available
+        if icon_ico.exists() {
+            println!("cargo:warning=Using existing icons from src-tauri/icons/");
+        } else {
+            println!("cargo:warning=⚠ No icons available! Build may fail.");
+            return;
         }
-        _ => {
-            // Fallback to cargo-tauri
-            let cargo_output = Command::new("cargo")
-                .args(&["tauri", "icon", icon_svg.to_str().unwrap()])
-                .current_dir("..")
-                .output();
-            
-            match cargo_output {
-                Ok(output) if output.status.success() => {
-                    println!("cargo:warning=Icons generated successfully with cargo-tauri");
-                    true
-                }
-                Ok(_) | Err(_) => {
-                    println!("cargo:warning=Icon generation skipped (bun/cargo-tauri not available)");
-                    println!("cargo:warning=Run manually: cargo icons");
-                    false
-                }
-            }
-        }
-    };
-    
-    if !success {
-        println!("cargo:warning=Icons will need to be generated manually before building");
     }
-    // Don't copy to assets/icons - keep them only in src-tauri/icons/
+    
+    // Copy icon.ico to src/favicon.ico for SvelteKit (always overwrite)
+    let favicon = app_dir.join("src/favicon.ico");
+    
+    if icon_ico.exists() {
+        if let Err(e) = build_utils::copy_file_overwrite(&icon_ico, &favicon) {
+            println!("cargo:warning=Failed to copy favicon.ico: {}", e);
+        } else {
+            println!("cargo:warning=✅ Copied favicon.ico to src/favicon.ico");
+        }
+    }
 }
