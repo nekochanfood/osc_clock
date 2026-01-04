@@ -17,6 +17,34 @@ OSC Clock はOSCを通して日付と時刻を VRChat に送信するプログ�
 
 [https://github.com/nekochanfood/osc_clock/releases](https://github.com/nekochanfood/osc_clock/releases/latest) から、最新版の OSC Clock をダウンロードすることができます。
 
+### 自分でプログラムをビルドする
+
+コンパイル済みの実行ファイルをダウンロードして実行することに不安を感じていますか？安心してください。
+
+このソフトウェアはオープンソースソフトウェアであり、構成するすべてのソースコードを自由に閲覧できるほか、ご自身のマシン上でビルドすることも可能です。
+
+Rust および Cargo がインストールされていない場合は、事前に [https://www.rust-lang.org/](https://www.rust-lang.org/) よりセットアップしてください。
+
+まずは、OSC Clock のリポジトリをローカル環境にクローンします。
+```
+git clone https://github.com/nekochanfood/osc_clock.git
+cd osc_clock
+```
+
+次に、依存関係をインストールします。
+```
+cargo fetch
+```
+
+ビルドを開始します。
+```
+cargo build --release
+```
+
+ビルドが成功すると、実行ファイルは次の場所に生成されます。
+```
+target/release/osc_clock
+```
 
 ## リソースをインストールする
 
