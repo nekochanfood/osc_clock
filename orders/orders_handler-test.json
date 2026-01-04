@@ -1,0 +1,26 @@
+[
+  {
+    "type": "update_handler",
+    "address": "/avatar/parameters/Grounded"
+  },
+  {
+    "type": "update_handler",
+    "address": "/avatar/parameters/AFK"
+  },
+  {
+    "type": "update_handler",
+    "address": "/avatar/parameters/MuteSelf"
+  },
+  {
+    "type": "update_handler",
+    "address": "/avatar/parameters/Earmuffs"
+  },
+  {
+    "type": "update_handler",
+    "address": "/avatar/parameters/ScaleModified"
+  },
+  {
+    "type": "update_handler",
+    "address": "/avatar/parameters/IsLocal"
+  }
+]
