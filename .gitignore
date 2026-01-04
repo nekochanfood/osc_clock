@@ -2,6 +2,31 @@
 /target
 /packages/*/target
 
+# Node / Bun
+node_modules/
+.svelte-kit/
+build/
+.env
+.env.*
+!.env.example
+
+# Lock files
+package-lock.json
+yarn.lock
+# Keep bun.lock
+
+# Generated icons (auto-generated from assets/icons/icon.svg)
+/packages/app/src-tauri/icons/
+/packages/core/icons/
+# Exclude ALL generated icons in assets/icons/, keep only source files
+/assets/icons/*.png
+/assets/icons/*.ico
+/assets/icons/*.icns
+/assets/icons/android/
+/assets/icons/ios/
+# Keep source files
+!/assets/icons/*.svg
+
 # IDE
 .vscode/
 .idea/

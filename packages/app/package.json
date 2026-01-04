@@ -1,0 +1,33 @@
+{
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "^2"
+  },
+  "description": "",
+  "devDependencies": {
+    "@sveltejs/adapter-static": "^3.0.6",
+    "@sveltejs/kit": "^2.9.0",
+    "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "@tauri-apps/cli": "^2",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.0.0",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.3"
+  },
+  "license": "MIT",
+  "name": "app",
+  "scripts": {
+    "build": "vite build",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "dev": "vite dev",
+    "icons:generate": "cargo run --manifest-path ../../scripts/icon-generator/Cargo.toml",
+    "icons:watch": "node ../../scripts/watch-icons.mjs",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:build": "tauri build",
+    "tauri:dev": "tauri dev"
+  },
+  "type": "module",
+  "version": "3.0.0"
+}

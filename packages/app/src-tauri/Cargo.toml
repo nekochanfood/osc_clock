@@ -1,0 +1,29 @@
+[package]
+name = "app"
+version.workspace = true
+description = "OSC Clock GUI Application"
+authors.workspace = true
+edition.workspace = true
+
+# Main binary (GUI only)
+[[bin]]
+name = "osc_clock"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { workspace = true }
+serde_json = { workspace = true }
+
+[dependencies]
+tauri = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+once_cell = { workspace = true }
+clap = { workspace = true }
+
+# OSC Clock core library
+osc_clock = { path = "../../core" }
+# Shared utilities including logging
+shared = { path = "../../shared" }
+
