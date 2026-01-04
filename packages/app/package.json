@@ -21,8 +21,6 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "dev": "vite dev",
-    "icons:generate": "cargo run --manifest-path ../../scripts/icon-generator/Cargo.toml",
-    "icons:watch": "node ../../scripts/watch-icons.mjs",
     "preview": "vite preview",
     "tauri": "tauri",
     "tauri:build": "tauri build",
