@@ -1,7 +1,11 @@
+use osc_clock;
 use clap::{Arg, Command};
-use crate::recovery::repair;
 
-pub fn check_args() {
+#[macro_use]
+extern crate rust_i18n;
+rust_i18n::i18n!("locales");
+
+fn check_args() {
     let matches = Command::new(env!("CARGO_PKG_NAME"))
         .version(env!("CARGO_PKG_VERSION"))
         .author(env!("CARGO_PKG_AUTHORS"))
@@ -16,7 +20,18 @@ pub fn check_args() {
         .get_matches();
 
     if matches.get_flag("repair") {
-        repair();
+        osc_clock::recovery::repair();
     }
 }
 
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    check_args();
+
+    println!("{} {}", env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"));
+    println!("{}\n", t!("press_ctrl+c_to_exit"));
+
+    osc_clock::run().await?;
+
+    Ok(())
+}

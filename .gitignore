@@ -1,1 +1,27 @@
+# Rust
 /target
+/packages/*/target
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.exe
+*.pdb
+*.dll
+*.so
+*.dylib
+
+# Logs
+*.log
+
+# Editor backup files
+*~
+*.swp
+*.swo
+

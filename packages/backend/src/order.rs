@@ -1,10 +1,10 @@
 use crate::log::{print_flush, print_log, LogType};
+use crate::path::get_exe_relative_path;
 use crate::unit::UnitType;
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::io::Write;
-use std::path::Path;
 use std::{fs, io};
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -27,7 +27,8 @@ pub fn init_orders() {
 
 pub fn load_orders() -> Orders {
     let mut orders = Vec::new();
-    let orders_dir = Path::new("orders");
+    let orders_dir_path = get_exe_relative_path("orders");
+    let orders_dir = orders_dir_path.as_path();
 
     if !orders_dir.exists() {
         if let Err(e) = fs::create_dir_all(orders_dir) {

@@ -1,5 +1,6 @@
 use crate::log::print_flush;
 use crate::log::{print_log, LogType};
+use crate::path::get_exe_relative_path;
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -149,7 +150,8 @@ fn check_itgr(
 
 pub fn repair_config_json(force: bool) -> Result<bool, io::Error> {
     let mut file: File;
-    let path = std::path::Path::new("./config.json");
+    let config_path = get_exe_relative_path("config.json");
+    let path = config_path.as_path();
     if path.is_file() && !force {
         match read_config_json(path.to_str().unwrap(), true) {
             Ok(result) => {
@@ -176,7 +178,7 @@ pub fn repair_config_json(force: bool) -> Result<bool, io::Error> {
             }
             fs::remove_file(path)?;
         }
-        file = File::create("./config.json")?;
+        file = File::create(&config_path)?;
         let json =
             serde_json::to_string_pretty(&validate(config, vec!["config_status".to_string()]))?;
 
@@ -201,7 +203,8 @@ fn validate(config: Config, exclusions: Vec<String>) -> serde_json::Value {
 
 fn load_config() -> Config {
     let config;
-    match read_config_json("./config.json", true) {
+    let config_path = get_exe_relative_path("config.json");
+    match read_config_json(config_path.to_str().unwrap(), true) {
         Ok(result) => {
             config = result;
             rust_i18n::set_locale(&config.language);

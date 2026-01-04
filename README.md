@@ -15,3 +15,4 @@ If you still want to synchronise, increase the existing rate in config.json by a
 ## Troubleshooting
 
 Use `.\osc_clock.exe --repair` to repair a config file.
+
