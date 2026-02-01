@@ -1,4 +1,4 @@
-use rosc::OscMessage;
+use vrchat_osc::rosc::OscMessage;
 
 use crate::config::CONFIG;
 use crate::sender::{ sender, send };

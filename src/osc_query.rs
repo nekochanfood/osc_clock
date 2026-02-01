@@ -1,6 +1,6 @@
 use chrono::{ Local };
 use vrchat_osc::{ models::OscRootNode, Error, ServiceType, VRChatOSC };
-use rosc::{ OscMessage, OscPacket };
+use vrchat_osc::rosc::{ OscMessage, OscPacket };
 
 use crate::log::{ print_log, print_flush, LogType };
 use crate::config::{ CONFIG };
@@ -11,7 +11,7 @@ use crate::sender::{sender, send};
 use crate::message::{ build, BuilderParams};
 
 pub async fn start() -> Result<(), Error> {
-    let vrchat_osc = VRChatOSC::new().await?;
+    let vrchat_osc = VRChatOSC::new(None).await?;
 
     vrchat_osc.on_connect(move |res| {
         match res {
