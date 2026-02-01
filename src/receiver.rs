@@ -1,5 +1,5 @@
 use chrono::Local;
-use rosc::{ OscMessage, OscPacket, OscType };
+use vrchat_osc::rosc::{ OscMessage, OscPacket, OscType };
 use std::net::{ UdpSocket, SocketAddr };
 
 use crate::config::{ CONFIG };
@@ -29,7 +29,7 @@ pub async fn receiver() {
         let (size, _) = socket
             .recv_from(&mut buf)
             .expect(&print_log(t!("failed_to_receive_data").to_string(), LogType::ERROR));
-        match rosc::decoder::decode_udp(&buf[..size]) {
+        match vrchat_osc::rosc::decoder::decode_udp(&buf[..size]) {
             Ok(packet) => {
                 match packet {
                     (_, OscPacket::Message(msg)) => {

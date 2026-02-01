@@ -1,5 +1,5 @@
 use chrono::{ Local, Timelike, Datelike };
-use rosc::OscType;
+use vrchat_osc::rosc::OscType;
 use serde::{ Serialize, Deserialize };
 
 use crate::message::SyncFlag;

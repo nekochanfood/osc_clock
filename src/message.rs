@@ -1,6 +1,6 @@
 
 use chrono::Local;
-use rosc::{ OscMessage, OscType };
+use vrchat_osc::rosc::{ OscMessage, OscType };
 use serde::{Serialize, Deserialize};
 use crate::{ config::CONFIG, log::{ print_flush, print_log, LogType }, unit::handle_unit };
 use crate::order::{ Order};

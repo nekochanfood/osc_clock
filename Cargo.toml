@@ -10,9 +10,8 @@ authors = ["nekochanfood (nekochanfood@gmail.com)"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-vrchat_osc = "1.1"
+vrchat_osc = "2.0"
 tokio = { version = "1", features = ["full"] }
-rosc = "0.10"
 once_cell = "1.19"
 fake = "2.6"
 chrono = "0.4"
