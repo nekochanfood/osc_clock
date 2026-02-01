@@ -114,13 +114,13 @@ fn generate_icons() {
     }
     
     // Copy icon.ico to src/favicon.ico for SvelteKit (always overwrite)
-    let favicon = app_dir.join("src/favicon.ico");
+    let favicon = app_dir.join("static/favicon.ico");
     
     if icon_ico.exists() {
         if let Err(e) = build_utils::copy_file_overwrite(&icon_ico, &favicon) {
             println!("cargo:warning=Failed to copy favicon.ico: {}", e);
         } else {
-            println!("cargo:warning=✅ Copied favicon.ico to src/favicon.ico");
+            println!("cargo:warning=✅ Copied favicon.ico to static/favicon.ico");
         }
     }
 }
