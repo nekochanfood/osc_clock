@@ -1,4 +1,4 @@
-use rosc::OscMessage;
+use vrchat_osc::rosc::OscMessage;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool};
 

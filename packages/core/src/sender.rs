@@ -1,5 +1,5 @@
 use chrono::{ Local, Timelike, Datelike };
-use rosc::{ OscPacket, OscMessage };
+use vrchat_osc::rosc::{ OscPacket, OscMessage };
 use std::net::{ UdpSocket, SocketAddr };
 
 use crate::{ log_message, LogType };
@@ -79,7 +79,7 @@ pub fn send(message: OscMessage, ip: &str, port: u16) {
     let addr = SocketAddr::new(ip.parse().unwrap(), port);
 
     let packet = OscPacket::Message(message);
-    let encoded_packet = rosc::encoder::encode(&packet).unwrap();
+    let encoded_packet = vrchat_osc::rosc::encoder::encode(&packet).unwrap();
 
     socket.send_to(&encoded_packet, addr).unwrap();
 

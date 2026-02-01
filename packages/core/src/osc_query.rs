@@ -1,6 +1,7 @@
 use chrono::{ Local };
 use vrchat_osc::{ models::OscRootNode, Error, ServiceType, VRChatOSC };
-use rosc::{ OscMessage, OscPacket };
+use vrchat_osc::rosc::{ OscMessage, OscPacket };
+
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
