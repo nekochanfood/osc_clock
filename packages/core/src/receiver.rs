@@ -1,5 +1,5 @@
 use chrono::Local;
-use rosc::{ OscMessage, OscPacket, OscType };
+use vrchat_osc::rosc::{ self, OscMessage, OscPacket, OscType };
 use std::net::{ UdpSocket, SocketAddr };
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};

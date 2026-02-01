@@ -19,7 +19,7 @@ pub async fn start() -> Result<(), Error> {
 }
 
 pub async fn start_with_cancel(running: Arc<AtomicBool>) -> Result<(), Error> {
-    let vrchat_osc = VRChatOSC::new().await?;
+    let vrchat_osc = VRChatOSC::new(None).await?;
 
     vrchat_osc.on_connect(move |res| {
         match res {

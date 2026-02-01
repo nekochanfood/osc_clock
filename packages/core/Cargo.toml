@@ -21,7 +21,6 @@ build-utils = { path = "../build-utils" }
 [dependencies]
 vrchat_osc = { workspace = true }
 tokio = { workspace = true }
-rosc = { workspace = true }
 once_cell = { workspace = true }
 fake = { workspace = true }
 chrono = { workspace = true }
